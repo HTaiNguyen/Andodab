@@ -1,14 +1,11 @@
 package fr.upem.andodab.object;
 
-import java.util.HashMap;
-
 public class AndodabObject {
 	private Long id;
 	private String name;
 	private String value;
 	private AndodabObjectType type;
 	private Long parentId;
-	private HashMap<String, AndodabObject> dictionary;
 	
 	public AndodabObject(Long id) {
 		this.id = id;
@@ -17,7 +14,7 @@ public class AndodabObject {
 	public AndodabObject(Long id, String name, String value, AndodabObjectType type, Long parentId) {
 		this.id = id;
 		this.name = name; 
-		this.value = value;
+		this.setValue(value);
 		this.type = type;
 		this.parentId = parentId;
 	}
@@ -52,5 +49,13 @@ public class AndodabObject {
 	
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

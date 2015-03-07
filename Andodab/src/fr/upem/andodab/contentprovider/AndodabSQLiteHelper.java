@@ -14,7 +14,7 @@ public class AndodabSQLiteHelper extends SQLiteOpenHelper {
 	public static final String OBJECT_TYPE = "type";
 	public static final String OBJECT_PARENT_ID = "parent_id";
 	
-	private static final String OBJECT_DROP_TABLE = "DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME;
+	public static final String OBJECT_DROP_TABLE = "DROP TABLE IF EXISTS " + OBJECT_TABLE_NAME;
 	public static final String OBJECT_CREATE_TABLE = 
 			"CREATE TABLE " + OBJECT_TABLE_NAME + " (" + 
 					OBJECT_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
