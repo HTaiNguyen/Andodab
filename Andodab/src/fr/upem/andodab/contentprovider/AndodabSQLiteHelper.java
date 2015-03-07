@@ -22,10 +22,16 @@ public class AndodabSQLiteHelper extends SQLiteOpenHelper {
 					OBJECT_VALUE + " TEXT, " + 
 					OBJECT_PARENT_ID + "INTEGER FOREIGN KEY);";
 	
+	private final static String DB_NAME = "andodab.db";
+	private final static int DB_VERSION = 1;
 	
 	public AndodabSQLiteHelper(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
+	}
+	
+	public AndodabSQLiteHelper(Context context) {
+		super(context, DB_NAME, null, DB_VERSION);
 	}
 	
 	@Override
