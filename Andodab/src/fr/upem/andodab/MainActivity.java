@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
 
 		dbManager = new DbManager();
 		dbManager.onCreate();
-		
+
 		ContentValues values = new ContentValues();
 		values.put(Object.OBJECT_NAME, "Objet1");
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
@@ -28,13 +28,13 @@ public class MainActivity extends Activity {
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
 		values.put(Object.OBJECT_NAME, "Objet3");
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
-		
+
 		String columns[] = new String[] { Object.OBJECT_ID, Object.OBJECT_NAME };
 		Cursor cursor = getContentResolver().query(DbManager.CONTENT_URI, columns, null, null, null);
-		
+
 		if (cursor.moveToFirst()) {
 			String name = null;
-			
+
 			do {
 				name = cursor.getString(cursor.getColumnIndex(Object.OBJECT_ID)) + " " + cursor.getString(cursor.getColumnIndex(Object.OBJECT_NAME));
 				Toast.makeText(this, name + " ", Toast.LENGTH_LONG).show();
