@@ -24,8 +24,8 @@
         </activity>
 
         <provider
-            android:name="fr.upem.test.AndodabContentProvider"
-            android:authorities="fr.upem.test.AndodabContentProvider"
+            android:name="fr.upem.test.DbManager"
+            android:authorities="fr.upem.test.DbManager"
             android:exported="false"
             android:syncable="true" />
     </application>
