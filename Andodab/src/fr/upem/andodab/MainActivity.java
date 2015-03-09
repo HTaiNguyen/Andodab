@@ -1,29 +1,21 @@
 package fr.upem.andodab;
 
 import fr.upem.test.DbManager;
-import fr.upem.test.Object;
 import android.app.Activity;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	//private DbManager dbManager;
+	private DbManager dbManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//dbManager = new DbManager(this);
-		//dbManager.onCreate();
-
-		insertRecords();
-		displayContentProvider();
+		dbManager = new DbManager();
+		dbManager.onCreate();
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void displayContentProvider() {
+	/*private void displayContentProvider() {
 		String columns[] = new String[] { Object.OBJECT_ID, Object.OBJECT_NAME };
 		Uri mContacts = DbManager.CONTENT_URI;
 		Cursor cur = managedQuery(mContacts, columns, null, null, null);
@@ -71,5 +63,5 @@ public class MainActivity extends Activity {
 		contact.clear();
 		contact.put(Object.OBJECT_NAME, "C++");
 		getContentResolver().insert(DbManager.CONTENT_URI, contact);
-	}
+	}*/
 }

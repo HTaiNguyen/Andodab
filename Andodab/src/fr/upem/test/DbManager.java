@@ -45,13 +45,10 @@ public class DbManager extends ContentProvider {
 		}
 	}
 
-	/*public DbManager(Context context) {
-		this.context = context;
-	}*/
-
 	@Override
 	public boolean onCreate() {
-		dbHelper = new DbHelper(getContext());
+		this.context = getContext();
+		dbHelper = new DbHelper(context);
 
 		return true;
 	}
