@@ -84,9 +84,7 @@ public class DbManager extends ContentProvider {
 			if (id == -1) {
 				throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
 			} else {
-				Uri newUri = ContentUris.withAppendedId(uri, id);
-				context.getContentResolver().notifyChange(newUri, null);
-				return newUri;
+				return ContentUris.withAppendedId(uri, id);
 			}
 		} finally {
 			db.close();
