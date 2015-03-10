@@ -76,4 +76,9 @@ public class ADObject {
 	public void addKeyValue(String key, ADObject value) {
 		dictionary.put(key, value);
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
