@@ -19,8 +19,8 @@ public class DbManager extends ContentProvider {
 
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE " + TABLE_NAME + " (" + 
-					Object.OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					Object.OBJECT_NAME + " VARCHAR(255)" + 
+					ADObject.OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+					ADObject.OBJECT_NAME + " VARCHAR(255)" + 
 					");";
 	public static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -62,7 +62,7 @@ public class DbManager extends ContentProvider {
 		if (id < 0) {
 			return db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 		} else {
-			return db.query(TABLE_NAME, projection, Object.OBJECT_ID + "=" + id, null, null, null, null);
+			return db.query(TABLE_NAME, projection, ADObject.OBJECT_ID + "=" + id, null, null, null, null);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class DbManager extends ContentProvider {
 			if (id < 0) {
 				return db.delete(TABLE_NAME, selection, selectionArgs);
 			} else {
-				return db.delete(TABLE_NAME, Object.OBJECT_ID + "=" + id, selectionArgs);
+				return db.delete(TABLE_NAME, ADObject.OBJECT_ID + "=" + id, selectionArgs);
 			}
 		} finally {
 			db.close();
@@ -115,7 +115,7 @@ public class DbManager extends ContentProvider {
 			if (id < 0) {
 				return db.update(TABLE_NAME, values, selection, selectionArgs);
 			} else {
-				return db.update(TABLE_NAME, values, Object.OBJECT_ID + "=" + id, null);
+				return db.update(TABLE_NAME, values, ADObject.OBJECT_ID + "=" + id, null);
 			}
 		} finally {
 			db.close();

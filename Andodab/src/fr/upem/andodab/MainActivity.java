@@ -1,13 +1,17 @@
 package fr.upem.andodab;
 
+import java.util.ArrayList;
+
 import fr.upem.test.DbManager;
-import fr.upem.test.Object;
+import fr.upem.test.ADObject;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -22,24 +26,30 @@ public class MainActivity extends Activity {
 		dbManager.onCreate();
 
 		ContentValues values = new ContentValues();
-		values.put(Object.OBJECT_NAME, "Objet1");
+		values.put(ADObject.OBJECT_NAME, "Objet1");
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
-		values.put(Object.OBJECT_NAME, "Objet2");
+		values.put(ADObject.OBJECT_NAME, "Objet2");
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
-		values.put(Object.OBJECT_NAME, "Objet3");
+		values.put(ADObject.OBJECT_NAME, "Objet3");
 		getContentResolver().insert(DbManager.CONTENT_URI, values);
 
-		String columns[] = new String[] { Object.OBJECT_ID, Object.OBJECT_NAME };
+		String columns[] = new String[] { ADObject.OBJECT_ID, ADObject.OBJECT_NAME };
 		Cursor cursor = getContentResolver().query(DbManager.CONTENT_URI, columns, null, null, null);
+		ArrayList<String> result = new ArrayList<String>();
 
 		if (cursor.moveToFirst()) {
 			String name = null;
 
 			do {
-				name = cursor.getString(cursor.getColumnIndex(Object.OBJECT_ID)) + " " + cursor.getString(cursor.getColumnIndex(Object.OBJECT_NAME));
-				Toast.makeText(this, name + " ", Toast.LENGTH_LONG).show();
+				name = cursor.getString(cursor.getColumnIndex(ADObject.OBJECT_ID)) + " " + cursor.getString(cursor.getColumnIndex(ADObject.OBJECT_NAME));
+				result.add(name);
 			} while (cursor.moveToNext());
 		}
+
+		final ListView listview = (ListView) findViewById(R.id.listview);
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, result);
+		listview.setAdapter(adapter);
 	}
 
 	@Override
