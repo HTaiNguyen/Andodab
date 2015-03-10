@@ -8,9 +8,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.upem.andodab.MainActivity" >
 
+    <TextView
+        android:id="@+id/titleObjectList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="@string/title_object_list" />
+
     <ListView
-        android:id="@+id/listview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:id="@+id/objectList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleObjectList" />
 
 </RelativeLayout>

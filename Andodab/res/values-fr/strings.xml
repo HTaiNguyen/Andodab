@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Andodab</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_object_list">Liste des objets</string>
+
+</resources>

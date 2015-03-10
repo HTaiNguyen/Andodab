@@ -1,0 +1,10 @@
+<!-- ?xml version="1.0" encoding="utf-8"? -->
+<resources>
+
+    <array name="objectListMenu">
+        <item>Create an object</item>
+        <item>Add a new key</item>
+        <item>Redefine the value of a key</item>
+    </array>
+
+</resources>
