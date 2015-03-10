@@ -15,9 +15,18 @@ public class ADObject {
 	public static final class DBObject implements BaseColumns {
 		public static final String TABLE_NAME = "object";
 		public static final Uri CONTENT_URI = Uri.parse("content://" + DbManager.AUTHORITY + "/" + TABLE_NAME);
+		public static final String MIME = "vnd.android.cursor.item/vnd." + DbManager.AUTHORITY + "." + TABLE_NAME;
 
 		public static final String ID = "id";
 		public static final String NAME = "name";
+
+		public static final String SQL_CREATE_TABLE = 
+				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
+						ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+						NAME + " VARCHAR(255)" + 
+						");";
+		public static final String SQL_DROP_TABLE = 
+				"DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 
 	public ADObject(long id, String name, ADObject ancestor, boolean sealed) {
@@ -28,7 +37,7 @@ public class ADObject {
 		this.sealed = sealed;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

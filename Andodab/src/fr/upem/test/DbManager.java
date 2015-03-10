@@ -15,14 +15,6 @@ public class DbManager extends ContentProvider {
 	public static final String DB_NAME = "andodab.db";
 	public static final int DB_VERSION = 1;
 
-	public static final String SQL_CREATE_TABLE_OBJECT = 
-			"CREATE TABLE IF NOT EXISTS " + ADObject.DBObject.TABLE_NAME + " (" + 
-					ADObject.DBObject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					ADObject.DBObject.NAME + " VARCHAR(255)" + 
-					");";
-	public static final String SQL_DROP_TABLE_OBJECT = 
-			"DROP TABLE IF EXISTS " + ADObject.DBObject.TABLE_NAME;
-
 	private Context context;
 	private DbHelper dbHelper;
 
@@ -33,12 +25,12 @@ public class DbManager extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(SQL_CREATE_TABLE_OBJECT);
+			db.execSQL(ADObject.DBObject.SQL_CREATE_TABLE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL(SQL_DROP_TABLE_OBJECT);
+			db.execSQL(ADObject.DBObject.SQL_DROP_TABLE);
 
 			onCreate(db);
 		}
@@ -68,7 +60,7 @@ public class DbManager extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		return "vnd.android.cursor.item/vnd.fr.upem.test.DbManager.object";
+		return ADObject.DBObject.MIME;
 	}
 
 	@Override

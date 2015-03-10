@@ -37,10 +37,8 @@ public class MainActivity extends Activity {
 		ArrayList<String> result = new ArrayList<String>();
 
 		if (cursor.moveToFirst()) {
-			String name = null;
-
 			do {
-				name = cursor.getString(cursor.getColumnIndex(ADObject.DBObject.ID)) + " " + cursor.getString(cursor.getColumnIndex(ADObject.DBObject.ID));
+				String name = cursor.getString(cursor.getColumnIndex(ADObject.DBObject.ID)) + " " + cursor.getString(cursor.getColumnIndex(ADObject.DBObject.NAME));
 				result.add(name);
 			} while (cursor.moveToNext());
 		}
