@@ -11,19 +11,17 @@ import android.net.Uri;
 import android.util.Log;
 
 public class DbManager extends ContentProvider {
-	public static final Uri CONTENT_URI = Uri.parse("content://fr.upem.test.DbManager");
+	public static final String AUTHORITY = "fr.upem.test.DbManager";
 	public static final String DB_NAME = "andodab.db";
 	public static final int DB_VERSION = 1;
-	public static final String TABLE_NAME = "object";
-	public static final String MIME = "vnd.android.cursor.item/vnd.fr.upem.test.DbManager.object";
 
-	public static final String SQL_CREATE_TABLE = 
-			"CREATE TABLE " + TABLE_NAME + " (" + 
-					ADObject.OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					ADObject.OBJECT_NAME + " VARCHAR(255)" + 
+	public static final String SQL_CREATE_TABLE_OBJECT = 
+			"CREATE TABLE IF NOT EXISTS " + ADObject.DBObject.TABLE_NAME + " (" + 
+					ADObject.DBObject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+					ADObject.DBObject.NAME + " VARCHAR(255)" + 
 					");";
-	public static final String SQL_DROP_TABLE = 
-			"DROP TABLE IF EXISTS " + TABLE_NAME;
+	public static final String SQL_DROP_TABLE_OBJECT = 
+			"DROP TABLE IF EXISTS " + ADObject.DBObject.TABLE_NAME;
 
 	private Context context;
 	private DbHelper dbHelper;
@@ -35,12 +33,13 @@ public class DbManager extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(SQL_CREATE_TABLE);
+			db.execSQL(SQL_CREATE_TABLE_OBJECT);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL(SQL_DROP_TABLE);
+			db.execSQL(SQL_DROP_TABLE_OBJECT);
+
 			onCreate(db);
 		}
 	}
@@ -48,9 +47,10 @@ public class DbManager extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		this.context = getContext();
+
 		dbHelper = new DbHelper(context);
 
-		return true;
+		return (dbHelper == null) ? false : true;
 	}
 
 	@Override
@@ -60,15 +60,15 @@ public class DbManager extends ContentProvider {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 
 		if (id < 0) {
-			return db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+			return db.query(ADObject.DBObject.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 		} else {
-			return db.query(TABLE_NAME, projection, ADObject.OBJECT_ID + "=" + id, null, null, null, null);
+			return db.query(ADObject.DBObject.TABLE_NAME, projection, ADObject.DBObject.ID + "=" + id, null, null, null, null);
 		}
 	}
 
 	@Override
 	public String getType(Uri uri) {
-		return MIME;
+		return "vnd.android.cursor.item/vnd.fr.upem.test.DbManager.object";
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class DbManager extends ContentProvider {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 		try {
-			long id = db.insertOrThrow(TABLE_NAME, null, values);
+			long id = db.insertOrThrow(ADObject.DBObject.TABLE_NAME, null, values);
 
 			if (id == -1) {
 				throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
@@ -96,9 +96,9 @@ public class DbManager extends ContentProvider {
 
 		try {
 			if (id < 0) {
-				return db.delete(TABLE_NAME, selection, selectionArgs);
+				return db.delete(ADObject.DBObject.TABLE_NAME, selection, selectionArgs);
 			} else {
-				return db.delete(TABLE_NAME, ADObject.OBJECT_ID + "=" + id, selectionArgs);
+				return db.delete(ADObject.DBObject.TABLE_NAME, ADObject.DBObject.ID + "=" + id, selectionArgs);
 			}
 		} finally {
 			db.close();
@@ -113,9 +113,9 @@ public class DbManager extends ContentProvider {
 
 		try {
 			if (id < 0) {
-				return db.update(TABLE_NAME, values, selection, selectionArgs);
+				return db.update(ADObject.DBObject.TABLE_NAME, values, selection, selectionArgs);
 			} else {
-				return db.update(TABLE_NAME, values, ADObject.OBJECT_ID + "=" + id, null);
+				return db.update(ADObject.DBObject.TABLE_NAME, values, ADObject.DBObject.ID + "=" + id, null);
 			}
 		} finally {
 			db.close();

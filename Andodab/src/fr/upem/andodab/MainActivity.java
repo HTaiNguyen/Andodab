@@ -2,8 +2,8 @@ package fr.upem.andodab;
 
 import java.util.ArrayList;
 
-import fr.upem.test.DbManager;
 import fr.upem.test.ADObject;
+import fr.upem.test.DbManager;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private DbManager dbManager;
@@ -26,22 +25,22 @@ public class MainActivity extends Activity {
 		dbManager.onCreate();
 
 		ContentValues values = new ContentValues();
-		values.put(ADObject.OBJECT_NAME, "Objet1");
-		getContentResolver().insert(DbManager.CONTENT_URI, values);
-		values.put(ADObject.OBJECT_NAME, "Objet2");
-		getContentResolver().insert(DbManager.CONTENT_URI, values);
-		values.put(ADObject.OBJECT_NAME, "Objet3");
-		getContentResolver().insert(DbManager.CONTENT_URI, values);
+		values.put(ADObject.DBObject.NAME, "Objet1");
+		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
+		values.put(ADObject.DBObject.NAME, "Objet2");
+		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
+		values.put(ADObject.DBObject.NAME, "Objet3");
+		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
 
-		String columns[] = new String[] { ADObject.OBJECT_ID, ADObject.OBJECT_NAME };
-		Cursor cursor = getContentResolver().query(DbManager.CONTENT_URI, columns, null, null, null);
+		String columns[] = new String[] { ADObject.DBObject.ID, ADObject.DBObject.NAME };
+		Cursor cursor = getContentResolver().query(ADObject.DBObject.CONTENT_URI, columns, null, null, null);
 		ArrayList<String> result = new ArrayList<String>();
 
 		if (cursor.moveToFirst()) {
 			String name = null;
 
 			do {
-				name = cursor.getString(cursor.getColumnIndex(ADObject.OBJECT_ID)) + " " + cursor.getString(cursor.getColumnIndex(ADObject.OBJECT_NAME));
+				name = cursor.getString(cursor.getColumnIndex(ADObject.DBObject.ID)) + " " + cursor.getString(cursor.getColumnIndex(ADObject.DBObject.ID));
 				result.add(name);
 			} while (cursor.moveToNext());
 		}
