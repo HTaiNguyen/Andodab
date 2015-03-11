@@ -19,11 +19,15 @@ public class ADObject {
 
 		public static final String ID = "id";
 		public static final String NAME = "name";
+		public static final String ANCESTOR_ID = "ancestor_id";
+		public static final String SEALED = "sealed";
 
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
 						ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 						NAME + " VARCHAR(255)" + 
+						ANCESTOR_ID + "INTEGER" +
+						SEALED + "BOOLEAN" +
 						");";
 		public static final String SQL_DROP_TABLE = 
 				"DROP TABLE IF EXISTS " + TABLE_NAME;

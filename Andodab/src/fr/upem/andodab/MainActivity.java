@@ -6,6 +6,7 @@ import java.util.Arrays;
 import fr.upem.test.ADObject;
 import fr.upem.test.DbManager;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -27,18 +28,18 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//deleteDatabase(DbManager.DB_NAME);
+		deleteDatabase(DbManager.DB_NAME);
 
 		dbManager = new DbManager();
 		dbManager.onCreate();
 
-		/*ContentValues values = new ContentValues();
+		ContentValues values = new ContentValues();
 		values.put(ADObject.DBObject.NAME, "Objet1");
 		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
 		values.put(ADObject.DBObject.NAME, "Objet2");
 		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
 		values.put(ADObject.DBObject.NAME, "Objet3");
-		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);*/
+		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
 
 		ArrayList<String> result = new ArrayList<String>();
 		String columns[] = new String[] { ADObject.DBObject.ID, ADObject.DBObject.NAME };
