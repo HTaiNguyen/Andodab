@@ -1,4 +1,4 @@
-package fr.upem.andodab.contentprovider;
+package fr.upem.old.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

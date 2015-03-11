@@ -3,8 +3,8 @@ package fr.upem.andodab;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import fr.upem.test.ADObject;
-import fr.upem.test.DbManager;
+import fr.upem.andodab.db.DBManager;
+import fr.upem.andodab.db.DBObject;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
-	private DbManager dbManager;
+	private DBManager dbManager;
 	private String[] objects;
 
 	@Override
@@ -28,29 +28,38 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		deleteDatabase(DbManager.DB_NAME);
+		deleteDatabase(DBManager.DB_NAME);
 
-		dbManager = new DbManager();
+		dbManager = new DBManager();
 		dbManager.onCreate();
 
 		ContentValues values = new ContentValues();
-		values.put(ADObject.DBObject.NAME, "Objet1");
-		values.put(ADObject.DBObject.ANCESTOR_ID, 1);
-		values.put(ADObject.DBObject.SEALED, false);
-		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
-		/*values.put(ADObject.DBObject.NAME, "Objet2");
-		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
-		values.put(ADObject.DBObject.NAME, "Objet3");
-		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);*/
-		
+
+		values.put(DBObject.NAME, "Objet1");
+		values.put(DBObject.ANCESTOR_ID, 1);
+		values.put(DBObject.TYPE, "ROOT");
+		values.put(DBObject.SEALED, false);
+		getContentResolver().insert(DBObject.CONTENT_URI, values);
+
+		values.put(DBObject.NAME, "Objet2");
+		values.put(DBObject.ANCESTOR_ID, 1);
+		values.put(DBObject.TYPE, "COMMON");
+		values.put(DBObject.SEALED, false);
+		getContentResolver().insert(DBObject.CONTENT_URI, values);
+
+		values.put(DBObject.NAME, "Objet3");
+		values.put(DBObject.ANCESTOR_ID, 2);
+		values.put(DBObject.TYPE, "COMMON");
+		values.put(DBObject.SEALED, true);
+		getContentResolver().insert(DBObject.CONTENT_URI, values);
 
 		ArrayList<String> result = new ArrayList<String>();
-		String columns[] = new String[] { ADObject.DBObject.ID, ADObject.DBObject.NAME };
-		Cursor cursor = getContentResolver().query(ADObject.DBObject.CONTENT_URI, columns, null, null, null);
+		String columns[] = new String[] { DBObject.ID, DBObject.NAME };
+		Cursor cursor = getContentResolver().query(DBObject.CONTENT_URI, columns, null, null, null);
 
 		if (cursor.moveToFirst()) {
 			do {
-				String name = cursor.getString(cursor.getColumnIndex(ADObject.DBObject.NAME));
+				String name = cursor.getString(cursor.getColumnIndex(DBObject.NAME));
 				result.add(name);
 			} while (cursor.moveToNext());
 
@@ -119,14 +128,14 @@ public class MainActivity extends Activity {
 		System.out.println("Selected " + menuItemName + " for item " + listItemName);
 
 		switch (menuItemIndex) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			default:
-				break;
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		default:
+			break;
 		}
 
 		return true;

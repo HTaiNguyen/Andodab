@@ -1,4 +1,4 @@
-package fr.upem.andodab.object;
+package fr.upem.old.object;
 
 public class AndodabObject {
 	private Long id;

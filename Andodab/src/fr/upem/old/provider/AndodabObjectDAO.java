@@ -1,6 +1,6 @@
-package fr.upem.andodab.contentprovider;
+package fr.upem.old.provider;
 
-import fr.upem.andodab.object.AndodabObject;
+import fr.upem.old.object.AndodabObject;
 import android.content.Context;
 
 public class AndodabObjectDAO extends DAO {

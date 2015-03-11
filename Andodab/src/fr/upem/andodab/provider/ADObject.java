@@ -1,9 +1,6 @@
-package fr.upem.test;
+package fr.upem.andodab.provider;
 
 import java.util.HashMap;
-
-import android.net.Uri;
-import android.provider.BaseColumns;
 
 public class ADObject {
 	private long id;
@@ -11,27 +8,6 @@ public class ADObject {
 	private ADObject ancestor;
 	private HashMap<String, ADObject> dictionary;
 	private boolean sealed;
-
-	public static final class DBObject implements BaseColumns {
-		public static final String TABLE_NAME = "object";
-		public static final Uri CONTENT_URI = Uri.parse("content://" + DbManager.AUTHORITY + "/" + TABLE_NAME);
-		public static final String MIME = "vnd.android.cursor.item/vnd." + DbManager.AUTHORITY + "." + TABLE_NAME;
-
-		public static final String ID = "id";
-		public static final String NAME = "name";
-		public static final String ANCESTOR_ID = "ancestor_id";
-		public static final String SEALED = "sealed";
-
-		public static final String SQL_CREATE_TABLE = 
-				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
-						ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-						NAME + " VARCHAR(255), " + 
-						ANCESTOR_ID + " INTEGER, " +
-						SEALED + " BOOLEAN" +
-						");";
-		public static final String SQL_DROP_TABLE = 
-				"DROP TABLE IF EXISTS " + TABLE_NAME;
-	}
 
 	public ADObject(long id, String name, ADObject ancestor, boolean sealed) {
 		this.id = id;
