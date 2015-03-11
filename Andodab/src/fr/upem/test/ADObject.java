@@ -25,9 +25,9 @@ public class ADObject {
 		public static final String SQL_CREATE_TABLE = 
 				"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
 						ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-						NAME + " VARCHAR(255)" + 
-						ANCESTOR_ID + "INTEGER" +
-						SEALED + "BOOLEAN" +
+						NAME + " VARCHAR(255), " + 
+						ANCESTOR_ID + " INTEGER, " +
+						SEALED + " BOOLEAN" +
 						");";
 		public static final String SQL_DROP_TABLE = 
 				"DROP TABLE IF EXISTS " + TABLE_NAME;

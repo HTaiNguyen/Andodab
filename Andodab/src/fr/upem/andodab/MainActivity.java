@@ -35,11 +35,14 @@ public class MainActivity extends Activity {
 
 		ContentValues values = new ContentValues();
 		values.put(ADObject.DBObject.NAME, "Objet1");
+		values.put(ADObject.DBObject.ANCESTOR_ID, 1);
+		values.put(ADObject.DBObject.SEALED, false);
 		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
-		values.put(ADObject.DBObject.NAME, "Objet2");
+		/*values.put(ADObject.DBObject.NAME, "Objet2");
 		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
 		values.put(ADObject.DBObject.NAME, "Objet3");
-		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);
+		getContentResolver().insert(ADObject.DBObject.CONTENT_URI, values);*/
+		
 
 		ArrayList<String> result = new ArrayList<String>();
 		String columns[] = new String[] { ADObject.DBObject.ID, ADObject.DBObject.NAME };
