@@ -137,11 +137,39 @@ public class DBManager extends ContentProvider {
 		long id = getId(uri);
 
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-		if (id < 0) {
-			return db.query(DBObject.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-		} else {
-			return db.query(DBObject.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+		switch (uriMatcher.match(uri)) {
+			case CODE_TABLE_OBJECT:
+				if (id < 0) {
+					return db.query(DBObject.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBObject.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+				}
+			case CODE_TABLE_DICTIONARY:
+				if (id < 0) {
+					return db.query(DBDictionary.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBDictionary.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+				}
+			case CODE_TABLE_FLOAT:
+				if (id < 0) {
+					return db.query(DBFloat.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBFloat.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+				}
+			case CODE_TABLE_INTEGER:
+				if (id < 0) {
+					return db.query(DBInteger.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBInteger.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+				}
+			case CODE_TABLE_STRING:
+				if (id < 0) {
+					return db.query(DBString.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBString.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+				}
+			default:
+				throw new IllegalArgumentException("Unsupported URI : " + uri);
 		}
 	}
 
