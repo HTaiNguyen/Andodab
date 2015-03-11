@@ -4,7 +4,9 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -67,6 +69,34 @@ public class DBManager extends ContentProvider {
 	private Context context;
 	private DbHelper dbHelper;
 
+
+	private static final int CODE_TABLE_OBJECT = 1;
+	private static final int CODE_TABLE_OBJECT_ID = 2;
+	private static final int CODE_TABLE_DICTIONARY = 3;
+	private static final int CODE_TABLE_DICTIONARY_ID = 4;
+	private static final int CODE_TABLE_INTEGER = 5;
+	private static final int CODE_TABLE_INTEGER_ID = 6;
+	private static final int CODE_TABLE_STRING = 7;
+	private static final int CODE_TABLE_STRING_ID = 8;
+	private static final int CODE_TABLE_FLOAT = 9;
+	private static final int CODE_TABLE_FLOAT_ID = 10;
+
+	private static final UriMatcher uriMatcher;
+	static {
+		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		uriMatcher.addURI(AUTHORITY, DBObject.TABLE_NAME, CODE_TABLE_OBJECT);
+		uriMatcher.addURI(AUTHORITY, DBObject.TABLE_NAME + "/#", CODE_TABLE_OBJECT_ID);
+		uriMatcher.addURI(AUTHORITY, DBDictionary.TABLE_NAME, CODE_TABLE_DICTIONARY);
+		uriMatcher.addURI(AUTHORITY, DBDictionary.TABLE_NAME + "/#", CODE_TABLE_DICTIONARY_ID);
+		uriMatcher.addURI(AUTHORITY, DBInteger.TABLE_NAME, CODE_TABLE_INTEGER);
+		uriMatcher.addURI(AUTHORITY, DBInteger.TABLE_NAME, CODE_TABLE_INTEGER_ID);
+		uriMatcher.addURI(AUTHORITY, DBFloat.TABLE_NAME, CODE_TABLE_FLOAT);
+		uriMatcher.addURI(AUTHORITY, DBFloat.TABLE_NAME + "/#", CODE_TABLE_FLOAT_ID);
+		uriMatcher.addURI(AUTHORITY, DBString.TABLE_NAME, CODE_TABLE_STRING);
+		uriMatcher.addURI(AUTHORITY, DBString.TABLE_NAME + "/#", CODE_TABLE_STRING_ID);
+	}
+
+
 	private final class DbHelper extends SQLiteOpenHelper {
 		public DbHelper(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);
@@ -117,20 +147,66 @@ public class DBManager extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		return DBObject.MIME;
+		switch (uriMatcher.match(uri)) {
+			case CODE_TABLE_OBJECT:
+				return DBObject.MIME;
+			case CODE_TABLE_DICTIONARY:
+				return DBDictionary.MIME;
+			case CODE_TABLE_FLOAT:
+				return DBFloat.MIME;
+			case CODE_TABLE_STRING:
+				return DBString.MIME;
+			case CODE_TABLE_INTEGER:
+				return DBInteger.MIME;
+			default:
+				throw new IllegalArgumentException("Unsupported URI : " + uri);
+		}
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+		
 		try {
-			long id = db.insertOrThrow(DBObject.TABLE_NAME, null, values);
-
-			if (id == -1) {
-				throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
-			} else {
-				return ContentUris.withAppendedId(uri, id);
+			long id = 0;
+			switch (uriMatcher.match(uri)) {
+				case CODE_TABLE_OBJECT:
+					id  = db.insertOrThrow(DBObject.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				case CODE_TABLE_DICTIONARY:
+					id = db.insertOrThrow(DBDictionary.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				case CODE_TABLE_FLOAT:
+					id = db.insertOrThrow(DBFloat.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				case CODE_TABLE_INTEGER:
+					id = db.insertOrThrow(DBInteger.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				case CODE_TABLE_STRING:
+					id = db.insertOrThrow(DBString.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				default:
+					throw new SQLException("Failed to insert row into " + uri);
 			}
 		} finally {
 			db.close();
@@ -140,14 +216,41 @@ public class DBManager extends ContentProvider {
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		long id = getId(uri);
-
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-
 		try {
-			if (id < 0) {
-				return db.delete(DBObject.TABLE_NAME, selection, selectionArgs);
-			} else {
-				return db.delete(DBObject.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+			switch (uriMatcher.match(uri)) {
+				case CODE_TABLE_OBJECT:
+					if (id < 0) {
+						return db.delete(DBObject.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBObject.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+					}
+				case CODE_TABLE_DICTIONARY:
+					if (id < 0) {
+						return db.delete(DBDictionary.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBDictionary.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+					}
+				case CODE_TABLE_FLOAT:
+					if (id < 0) {
+						return db.delete(DBFloat.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBFloat.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+					}
+				case CODE_TABLE_INTEGER:
+					if (id < 0) {
+						return db.delete(DBInteger.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBInteger.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+					}
+				case CODE_TABLE_STRING:
+					if (id < 0) {
+						return db.delete(DBString.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBString.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+					}
+				default:
+					throw new IllegalArgumentException("Unsupported URI: " + uri);
 			}
 		} finally {
 			db.close();
@@ -161,10 +264,39 @@ public class DBManager extends ContentProvider {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 		try {
-			if (id < 0) {
-				return db.update(DBObject.TABLE_NAME, values, selection, selectionArgs);
-			} else {
-				return db.update(DBObject.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+			switch (uriMatcher.match(uri)) {
+				case CODE_TABLE_OBJECT: 
+					if (id < 0) {
+						return db.update(DBObject.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBObject.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+					}
+				case CODE_TABLE_DICTIONARY: 
+					if (id < 0) {
+						return db.update(DBDictionary.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBDictionary.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+					}
+				case CODE_TABLE_FLOAT: 
+					if (id < 0) {
+						return db.update(DBFloat.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBFloat.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+					}
+				case CODE_TABLE_INTEGER: 
+					if (id < 0) {
+						return db.update(DBInteger.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBInteger.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+					}
+				case CODE_TABLE_STRING: 
+					if (id < 0) {
+						return db.update(DBString.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBString.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+					}
+				default:
+					throw new IllegalArgumentException("Unsupported URI: " + uri);
 			}
 		} finally {
 			db.close();
