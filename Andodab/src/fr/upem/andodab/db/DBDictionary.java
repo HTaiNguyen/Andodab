@@ -13,17 +13,17 @@ public class DBDictionary {
 	public static final String VALUE_ID = "value_id";
 	
 	private long id;
-	private DBObject owner;
+	private long ownerId;
 	private String key;
-	private DBObject value;
+	private long valueId;
 	
 	public DBDictionary() {
 	}
 	
-	public DBDictionary(DBObject owner, String key, DBObject value) {
-		this.owner  = owner;
+	public DBDictionary(long ownerId, String key, long valueId) {
+		this.ownerId  = ownerId;
 		this.key = key;
-		this.value = value;
+		this.valueId = valueId;
 	}
 
 	public long getId() {
@@ -34,12 +34,12 @@ public class DBDictionary {
 		this.id = id;
 	}
 
-	public DBObject getOwner() {
-		return owner;
+	public long getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(DBObject owner) {
-		this.owner = owner;
+	public void setOwner(long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public String getKey() {
@@ -50,12 +50,12 @@ public class DBDictionary {
 		this.key = key;
 	}
 
-	public DBObject getValue() {
-		return value;
+	public long getValueId() {
+		return valueId;
 	}
 
-	public void setValue(DBObject value) {
-		this.value = value;
+	public void setValue(long valueId) {
+		this.valueId = valueId;
 	}
 	
 	
