@@ -16,52 +16,61 @@ public class DBManager extends ContentProvider {
 	public static final String AUTHORITY = "fr.upem.test.DbManager";
 	public static final String DB_NAME = "andodab.db";
 	public static final int DB_VERSION = 1;
-
+	
 	public static final String SQL_CREATE_TABLE_OBJECT = 
 			"CREATE TABLE IF NOT EXISTS " + DBObject.TABLE_NAME + " (" + 
 					DBObject.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 					DBObject.ANCESTOR_ID + " INTEGER, " +
-					DBObject.NAME + " VARCHAR(255), " + 
-					DBObject.TYPE + " VARCHAR(255), " + 
-					DBObject.SEALED + " BOOLEAN" + 
+					"FOREIGN KEY (" + DBObject.ANCESTOR_ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_OBJECT = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
+	
+	public static final String SQL_CREATE_TABLE_COMMON = 
+			"CREATE TABLE IF NOT EXISTS " + DBCommon.TABLE_NAME + " (" + 
+					DBCommon.ID + " INTEGER, " +
+					DBCommon.NAME + " VARCHAR(255), " + 
+					DBCommon.SEALED + " BOOLEAN," + 
+					"PRIMARY KEY (" + DBCommon.ID + ")" +
+					");";
+	public static final String SQL_DROP_TABLE_COMMON = 
+			"DROP TABLE IF EXISTS " + DBCommon.TABLE_NAME;
 
 	public static final String SQL_CREATE_TABLE_DICTIONARY = 
 			"CREATE TABLE IF NOT EXISTS " + DBDictionary.TABLE_NAME + " (" + 
 					DBDictionary.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 					DBDictionary.OBJECT_ID + " INTEGER, " +
 					DBDictionary.KEY + " VARCHAR(255), " + 
-					DBDictionary.VALUE_TYPE + " VARCHAR(255), " + 
-					DBDictionary.VALUE_ID + " INTEGER" + 
+					DBDictionary.VALUE_ID + " INTEGER, " + 
+					"FOREIGN KEY (" + DBDictionary.OBJECT_ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + "), " +
+					"FOREIGN KEY (" + DBDictionary.VALUE_ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_DICTIONARY = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
 
 	public static final String SQL_CREATE_TABLE_FLOAT = 
 			"CREATE TABLE IF NOT EXISTS " + DBFloat.TABLE_NAME + " (" + 
-					DBFloat.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					DBFloat.ANCESTOR_ID + " INTEGER, " + 
-					DBFloat.VALUE + " INTEGER" + 
+					DBFloat.ID + " INTEGER, " + 
+					DBFloat.VALUE + " REAL, " + 
+					"PRIMARY KEY (" + DBFloat.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_FLOAT = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
 
 	public static final String SQL_CREATE_TABLE_INTEGER = 
 			"CREATE TABLE IF NOT EXISTS " + DBInteger.TABLE_NAME + " (" + 
-					DBInteger.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					DBInteger.ANCESTOR_ID + " INTEGER, " + 
-					DBInteger.VALUE + " INTEGER" + 
+					DBInteger.ID + " INTEGER, " + 
+					DBInteger.VALUE + " INTEGER, " + 
+					"PRIMARY KEY (" + DBInteger.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_INTEGER = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
 
 	public static final String SQL_CREATE_TABLE_STRING = 
 			"CREATE TABLE IF NOT EXISTS " + DBString.TABLE_NAME + " (" + 
-					DBString.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-					DBString.ANCESTOR_ID + " INTEGER, " +
-					DBString.VALUE + " INTEGER" + 
+					DBString.ID + " INTEGER, " + 
+					DBString.VALUE + " TEXT, " + 
+					"PRIMARY KEY (" + DBString.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_STRING = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
@@ -74,12 +83,14 @@ public class DBManager extends ContentProvider {
 	private static final int CODE_TABLE_OBJECT_ID = 2;
 	private static final int CODE_TABLE_DICTIONARY = 3;
 	private static final int CODE_TABLE_DICTIONARY_ID = 4;
-	private static final int CODE_TABLE_INTEGER = 5;
-	private static final int CODE_TABLE_INTEGER_ID = 6;
-	private static final int CODE_TABLE_STRING = 7;
-	private static final int CODE_TABLE_STRING_ID = 8;
-	private static final int CODE_TABLE_FLOAT = 9;
-	private static final int CODE_TABLE_FLOAT_ID = 10;
+	private static final int CODE_TABLE_COMMON = 5;
+	private static final int CODE_TABLE_COMMON_ID = 6;
+	private static final int CODE_TABLE_INTEGER = 7;
+	private static final int CODE_TABLE_INTEGER_ID = 8;
+	private static final int CODE_TABLE_STRING = 9;
+	private static final int CODE_TABLE_STRING_ID = 10;
+	private static final int CODE_TABLE_FLOAT = 11;
+	private static final int CODE_TABLE_FLOAT_ID = 12;
 
 	private static final UriMatcher uriMatcher;
 	static {
@@ -88,6 +99,8 @@ public class DBManager extends ContentProvider {
 		uriMatcher.addURI(AUTHORITY, DBObject.TABLE_NAME + "/#", CODE_TABLE_OBJECT_ID);
 		uriMatcher.addURI(AUTHORITY, DBDictionary.TABLE_NAME, CODE_TABLE_DICTIONARY);
 		uriMatcher.addURI(AUTHORITY, DBDictionary.TABLE_NAME + "/#", CODE_TABLE_DICTIONARY_ID);
+		uriMatcher.addURI(AUTHORITY, DBCommon.TABLE_NAME, CODE_TABLE_COMMON);
+		uriMatcher.addURI(AUTHORITY, DBCommon.TABLE_NAME + "/#", CODE_TABLE_COMMON_ID);
 		uriMatcher.addURI(AUTHORITY, DBInteger.TABLE_NAME, CODE_TABLE_INTEGER);
 		uriMatcher.addURI(AUTHORITY, DBInteger.TABLE_NAME, CODE_TABLE_INTEGER_ID);
 		uriMatcher.addURI(AUTHORITY, DBFloat.TABLE_NAME, CODE_TABLE_FLOAT);
@@ -101,11 +114,21 @@ public class DBManager extends ContentProvider {
 		public DbHelper(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);
 		}
+		
+		@Override
+		public void onOpen(SQLiteDatabase db) {
+		    super.onOpen(db);
+		    if (!db.isReadOnly()) {
+		        // Enable foreign key constraints
+		        db.execSQL("PRAGMA foreign_keys=ON;");
+		    }
+		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(SQL_CREATE_TABLE_OBJECT);
 			db.execSQL(SQL_CREATE_TABLE_DICTIONARY);
+			db.execSQL(SQL_CREATE_TABLE_COMMON);
 			db.execSQL(SQL_CREATE_TABLE_FLOAT);
 			db.execSQL(SQL_CREATE_TABLE_INTEGER);
 			db.execSQL(SQL_CREATE_TABLE_STRING);
@@ -115,6 +138,7 @@ public class DBManager extends ContentProvider {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL(SQL_DROP_TABLE_OBJECT);
 			db.execSQL(SQL_DROP_TABLE_DICTIONARY);
+			db.execSQL(SQL_DROP_TABLE_COMMON);
 			db.execSQL(SQL_DROP_TABLE_FLOAT);
 			db.execSQL(SQL_DROP_TABLE_INTEGER);
 			db.execSQL(SQL_DROP_TABLE_STRING);
@@ -148,25 +172,31 @@ public class DBManager extends ContentProvider {
 				if (id < 0) {
 					return db.query(DBDictionary.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 				} else {
-					return db.query(DBDictionary.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+					return db.query(DBDictionary.TABLE_NAME, projection, DBDictionary.ID + "=" + id, null, null, null, null);
+				}
+			case CODE_TABLE_COMMON:
+				if (id < 0) {
+					return db.query(DBCommon.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+				} else {
+					return db.query(DBCommon.TABLE_NAME, projection, DBCommon.ID + "=" + id, null, null, null, null);
 				}
 			case CODE_TABLE_FLOAT:
 				if (id < 0) {
 					return db.query(DBFloat.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 				} else {
-					return db.query(DBFloat.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+					return db.query(DBFloat.TABLE_NAME, projection, DBFloat.ID + "=" + id, null, null, null, null);
 				}
 			case CODE_TABLE_INTEGER:
 				if (id < 0) {
 					return db.query(DBInteger.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 				} else {
-					return db.query(DBInteger.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+					return db.query(DBInteger.TABLE_NAME, projection, DBInteger.ID + "=" + id, null, null, null, null);
 				}
 			case CODE_TABLE_STRING:
 				if (id < 0) {
 					return db.query(DBString.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 				} else {
-					return db.query(DBString.TABLE_NAME, projection, DBObject.ID + "=" + id, null, null, null, null);
+					return db.query(DBString.TABLE_NAME, projection, DBString.ID + "=" + id, null, null, null, null);
 				}
 			default:
 				throw new IllegalArgumentException("Unsupported URI : " + uri);
@@ -180,6 +210,8 @@ public class DBManager extends ContentProvider {
 				return DBObject.MIME;
 			case CODE_TABLE_DICTIONARY:
 				return DBDictionary.MIME;
+			case CODE_TABLE_COMMON:
+				return DBCommon.MIME;
 			case CODE_TABLE_FLOAT:
 				return DBFloat.MIME;
 			case CODE_TABLE_STRING:
@@ -207,6 +239,13 @@ public class DBManager extends ContentProvider {
 					}
 				case CODE_TABLE_DICTIONARY:
 					id = db.insertOrThrow(DBDictionary.TABLE_NAME, null, values);
+					if (id == -1) {
+						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
+					} else {
+						return ContentUris.withAppendedId(uri, id);
+					}
+				case CODE_TABLE_COMMON:
+					id = db.insertOrThrow(DBCommon.TABLE_NAME, null, values);
 					if (id == -1) {
 						throw new RuntimeException(String.format("%s : Failed to insert [%s] for unknown reasons.","DbManager", values, uri));
 					} else {
@@ -257,7 +296,13 @@ public class DBManager extends ContentProvider {
 					if (id < 0) {
 						return db.delete(DBDictionary.TABLE_NAME, selection, selectionArgs);
 					} else {
-						return db.delete(DBDictionary.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
+						return db.delete(DBDictionary.TABLE_NAME, DBDictionary.ID + "=" + id, selectionArgs);
+					}				
+				case CODE_TABLE_COMMON:
+					if (id < 0) {
+						return db.delete(DBCommon.TABLE_NAME, selection, selectionArgs);
+					} else {
+						return db.delete(DBCommon.TABLE_NAME, DBObject.ID + "=" + id, selectionArgs);
 					}
 				case CODE_TABLE_FLOAT:
 					if (id < 0) {
@@ -303,7 +348,13 @@ public class DBManager extends ContentProvider {
 					if (id < 0) {
 						return db.update(DBDictionary.TABLE_NAME, values, selection, selectionArgs);
 					} else {
-						return db.update(DBDictionary.TABLE_NAME, values, DBObject.ID + "=" + id, null);
+						return db.update(DBDictionary.TABLE_NAME, values, DBDictionary.ID + "=" + id, null);
+					}
+				case CODE_TABLE_COMMON: 
+					if (id < 0) {
+						return db.update(DBCommon.TABLE_NAME, values, selection, selectionArgs);
+					} else {
+						return db.update(DBCommon.TABLE_NAME, values, DBObject.ID + "=" + id, null);
 					}
 				case CODE_TABLE_FLOAT: 
 					if (id < 0) {

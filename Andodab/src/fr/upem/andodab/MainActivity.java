@@ -32,34 +32,25 @@ public class MainActivity extends Activity {
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
-
+		
 		ContentValues values = new ContentValues();
 
-		values.put(DBObject.NAME, "Objet1");
-		values.put(DBObject.ANCESTOR_ID, 1);
-		values.put(DBObject.TYPE, "ROOT");
-		values.put(DBObject.SEALED, false);
+		values.putNull(DBObject.ANCESTOR_ID);
 		getContentResolver().insert(DBObject.CONTENT_URI, values);
 
-		values.put(DBObject.NAME, "Objet2");
 		values.put(DBObject.ANCESTOR_ID, 1);
-		values.put(DBObject.TYPE, "COMMON");
-		values.put(DBObject.SEALED, false);
 		getContentResolver().insert(DBObject.CONTENT_URI, values);
 
-		values.put(DBObject.NAME, "Objet3");
 		values.put(DBObject.ANCESTOR_ID, 2);
-		values.put(DBObject.TYPE, "COMMON");
-		values.put(DBObject.SEALED, true);
 		getContentResolver().insert(DBObject.CONTENT_URI, values);
 
 		ArrayList<String> result = new ArrayList<String>();
-		String columns[] = new String[] { DBObject.ID, DBObject.NAME };
+		String columns[] = new String[] { DBObject.ID, DBObject.ANCESTOR_ID};
 		Cursor cursor = getContentResolver().query(DBObject.CONTENT_URI, columns, null, null, null);
 
 		if (cursor.moveToFirst()) {
 			do {
-				String name = cursor.getString(cursor.getColumnIndex(DBObject.NAME));
+				String name = cursor.getString(cursor.getColumnIndex(DBObject.ID));
 				result.add(name);
 			} while (cursor.moveToNext());
 
