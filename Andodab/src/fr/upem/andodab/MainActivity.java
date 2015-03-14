@@ -2,11 +2,16 @@ package fr.upem.andodab;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import fr.upem.andodab.dao.DAOCommon;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -14,14 +19,17 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
 	private DBManager dbManager;
-	private String[] objects;
+	private DBCommon[] objects;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +48,66 @@ public class MainActivity extends Activity {
 		daoCommon.create(new DBCommon(1L, "String", false));
 		daoCommon.create(new DBCommon(1L, "Food", false));
 		daoCommon.create(new DBCommon(1L, "Animal", false));
-
-		ArrayList<String> result = new ArrayList<String>();
-		String columns[] = new String[] { DBCommon.ID, DBCommon.NAME};
-		Cursor cursor = getContentResolver().query(DBCommon.CONTENT_URI, columns, null, null, null);
-
-		if (cursor.moveToFirst()) {
-			do {
-				String name = cursor.getString(cursor.getColumnIndex(DBCommon.NAME));
-				result.add(name);
-			} while (cursor.moveToNext());
-
-			cursor.close();
-		}
-
-		objects = result.toArray(new String[result.size()]);
+		
+		List<DBCommon> results = daoCommon.findByAncestor(1);
+		
+		objects = results.toArray(new DBCommon[results.size()]);
 		Arrays.sort(objects);
 
+		final Button addButtonObject = (Button) findViewById(R.id.addButtonObject);
+		addButtonObject.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+				alert.setTitle(R.string.button_add_object_title);
+				alert.setMessage(R.string.button_add_object_message);
+				final EditText input = new EditText(MainActivity.this);
+				alert.setView(input);
+				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String name = input.getText().toString();
+						
+						daoCommon.create(new DBCommon(1L, name, false));
+						ContentValues values = new ContentValues();
+
+						values.put(DBObject.NAME, input.getText().toString());
+						values.put(DBObject.ANCESTOR_ID, 1);
+						values.put(DBObject.TYPE, "ROOT");
+						values.put(DBObject.SEALED, false);
+						
+						Uri uri = getContentResolver().insert(DBObject.CONTENT_URI, values);
+						long id = ContentUris.parseId(uri);
+						
+						objects.put(input.getText().toString(), id);
+						
+						adapter.clear();
+						
+						Uri table = DBObject.CONTENT_URI;
+						String columns[] = new String[] { DBObject.ID, DBObject.NAME };
+						Cursor cursor = getContentResolver().query(table, columns, null, null, null);
+
+						if (cursor.moveToFirst()) {
+							do {
+								id = cursor.getInt(cursor.getColumnIndex(DBObject.ID));
+								String name = cursor.getString(cursor.getColumnIndex(DBObject.NAME));
+								objects.put(name, id);
+							} while (cursor.moveToNext());
+
+							cursor.close();
+						}
+					}
+				});
+
+				alert.setNegativeButton(R.string.button_edit_object_cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
+
+				alert.show();
+			}
+		});
+		
 		final ListView listview = (ListView) findViewById(R.id.objectList);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override

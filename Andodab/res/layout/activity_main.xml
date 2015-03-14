@@ -12,14 +12,22 @@
         android:id="@+id/titleObjectList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="20dp"
+        android:gravity="center"
         android:text="@string/title_object_list" />
+
+    <Button
+        android:id="@+id/addButtonObject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleObjectList"
+        android:layout_marginBottom="20dp"
+        android:text="@string/button_add_object" />
 
     <ListView
         android:id="@+id/objectList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titleObjectList" />
+        android:layout_below="@+id/addButtonObject" />
 
 </RelativeLayout>

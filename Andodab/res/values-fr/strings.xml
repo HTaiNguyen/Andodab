@@ -4,5 +4,11 @@
     <string name="app_name">Andodab</string>
     <string name="action_settings">Paramètres</string>
     <string name="title_object_list">Liste des objets</string>
+    <string name="button_add_object">Ajouter un objet</string>
+    <string name="button_add_object_title">Ajouter un objet</string>
+    <string name="button_add_object_message">Nom de l\'objet</string>
+    <string name="button_edit_object_message">Veuillez modifier le nom de l\'objet</string>
+    <string name="button_edit_object_ok">OK</string>
+    <string name="button_edit_object_cancel">Annuler</string>
 
 </resources>

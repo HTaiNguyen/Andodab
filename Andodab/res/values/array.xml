@@ -2,9 +2,8 @@
 <resources>
 
     <array name="objectListMenu">
-        <item>Create an object</item>
-        <item>Add a new key</item>
-        <item>Redefine the value of a key</item>
+        <item>Modifier</item>
+        <item>Supprimer</item>
     </array>
 
 </resources>
