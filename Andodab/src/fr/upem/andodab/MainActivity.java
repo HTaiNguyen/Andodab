@@ -41,16 +41,16 @@ public class MainActivity extends Activity {
 		dbManager = new DBManager();
 		dbManager.onCreate();
 
-		DAOCommon daoCommon = new DAOCommon(getContentResolver());
+		final DAOCommon daoCommon = new DAOCommon(getContentResolver());
 		daoCommon.create(new DBCommon(null, "Root", false));
 		daoCommon.create(new DBCommon(1L, "Float", false));
 		daoCommon.create(new DBCommon(1L, "Int", false));
 		daoCommon.create(new DBCommon(1L, "String", false));
 		daoCommon.create(new DBCommon(1L, "Food", false));
 		daoCommon.create(new DBCommon(1L, "Animal", false));
-		
-		List<DBCommon> results = daoCommon.findByAncestor(1);
-		
+
+		List<DBCommon> results = daoCommon.findByAncestor(1L);
+
 		objects = results.toArray(new DBCommon[results.size()]);
 		Arrays.sort(objects);
 
@@ -65,36 +65,18 @@ public class MainActivity extends Activity {
 				alert.setView(input);
 				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
+						long id = 0;
 						String name = input.getText().toString();
-						
-						daoCommon.create(new DBCommon(1L, name, false));
-						ContentValues values = new ContentValues();
 
-						values.put(DBObject.NAME, input.getText().toString());
-						values.put(DBObject.ANCESTOR_ID, 1);
-						values.put(DBObject.TYPE, "ROOT");
-						values.put(DBObject.SEALED, false);
-						
-						Uri uri = getContentResolver().insert(DBObject.CONTENT_URI, values);
-						long id = ContentUris.parseId(uri);
-						
-						objects.put(input.getText().toString(), id);
-						
-						adapter.clear();
-						
-						Uri table = DBObject.CONTENT_URI;
-						String columns[] = new String[] { DBObject.ID, DBObject.NAME };
-						Cursor cursor = getContentResolver().query(table, columns, null, null, null);
+						DBCommon common = new DBCommon(1L, name, false);
+						id = common.getId();
 
-						if (cursor.moveToFirst()) {
-							do {
-								id = cursor.getInt(cursor.getColumnIndex(DBObject.ID));
-								String name = cursor.getString(cursor.getColumnIndex(DBObject.NAME));
-								objects.put(name, id);
-							} while (cursor.moveToNext());
+						daoCommon.create(common);
 
-							cursor.close();
-						}
+						DBCommon[] newObjects = Arrays.copyOf(objects, objects.length + 1);
+						newObjects[objects.length] = common;
+						objects = newObjects;
+						Arrays.sort(objects);
 					}
 				});
 
@@ -107,16 +89,16 @@ public class MainActivity extends Activity {
 				alert.show();
 			}
 		});
-		
-		final ListView listview = (ListView) findViewById(R.id.objectList);
-		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				return false;
-			}
-		});
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, objects);
+		final ListView listview = (ListView) findViewById(R.id.objectList);
+
+		String[] objectsName = new String[objects.length];
+		
+		for (int i = 0; i < objects.length; i++) {
+			objectsName[i] = objects[i].getName();
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
 		listview.setAdapter(adapter);
 		registerForContextMenu(listview);
 	}
@@ -143,7 +125,7 @@ public class MainActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.objectList) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			menu.setHeaderTitle(objects[info.position]);
+			menu.setHeaderTitle(objects[info.position].getName());
 
 			String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
 
@@ -161,7 +143,7 @@ public class MainActivity extends Activity {
 
 		String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
 		String menuItemName = menuItems[menuItemIndex];
-		String listItemName = objects[info.position];
+		String listItemName = objects[info.position].getName();
 
 		System.out.println(menuItemIndex);
 		System.out.println("Selected " + menuItemName + " for item " + listItemName);
