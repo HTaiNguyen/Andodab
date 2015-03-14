@@ -22,17 +22,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <provider
             android:name=".db.DBManager"
             android:authorities="fr.upem.test.DbManager"
             android:exported="false"
             android:syncable="true" />
-
         <activity
             android:name=".MainActivity2"
             android:label="@string/title_activity_main_activity2" >
         </activity>
+        <activity
+            android:name=".NotificationActivity"
+            android:label="@string/title_activity_notification" >
+        </activity>
+        <service android:name="fr.upem.andodab.NotificationService"></service>
     </application>
 
 </manifest>
