@@ -31,7 +31,8 @@ public class DBManager extends ContentProvider {
 					DBCommon.ID + " INTEGER, " +
 					DBCommon.NAME + " VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE, " + 
 					DBCommon.SEALED + " BOOLEAN," + 
-					"PRIMARY KEY (" + DBCommon.ID + ")" +
+					"PRIMARY KEY (" + DBCommon.ID + "), " +
+					"FOREIGN KEY (" + DBCommon.ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_COMMON = 
 			"DROP TABLE IF EXISTS " + DBCommon.TABLE_NAME;
@@ -52,7 +53,8 @@ public class DBManager extends ContentProvider {
 			"CREATE TABLE IF NOT EXISTS " + DBFloat.TABLE_NAME + " (" + 
 					DBFloat.ID + " INTEGER, " + 
 					DBFloat.VALUE + " REAL, " + 
-					"PRIMARY KEY (" + DBFloat.ID + ")" +
+					"PRIMARY KEY (" + DBFloat.ID + "), " +
+					"FOREIGN KEY (" + DBFloat.ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_FLOAT = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
@@ -61,7 +63,8 @@ public class DBManager extends ContentProvider {
 			"CREATE TABLE IF NOT EXISTS " + DBInteger.TABLE_NAME + " (" + 
 					DBInteger.ID + " INTEGER, " + 
 					DBInteger.VALUE + " INTEGER, " + 
-					"PRIMARY KEY (" + DBInteger.ID + ")" +
+					"PRIMARY KEY (" + DBInteger.ID + "), " +
+					"FOREIGN KEY (" + DBInteger.ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_INTEGER = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
@@ -70,7 +73,8 @@ public class DBManager extends ContentProvider {
 			"CREATE TABLE IF NOT EXISTS " + DBString.TABLE_NAME + " (" + 
 					DBString.ID + " INTEGER, " + 
 					DBString.VALUE + " TEXT, " + 
-					"PRIMARY KEY (" + DBString.ID + ")" +
+					"PRIMARY KEY (" + DBString.ID + "), " +
+					"FOREIGN KEY (" + DBString.ID + ") REFERENCES " + DBObject.TABLE_NAME + "(" + DBObject.ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE_STRING = 
 			"DROP TABLE IF EXISTS " + DBObject.TABLE_NAME;
