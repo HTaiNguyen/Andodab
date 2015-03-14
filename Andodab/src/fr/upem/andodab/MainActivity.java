@@ -1,6 +1,5 @@
 package fr.upem.andodab;
 
-import java.util.Arrays;
 import java.util.List;
 
 import fr.upem.andodab.dao.DAOCommon;
@@ -45,7 +44,6 @@ public class MainActivity extends Activity {
 		List<DBCommon> results = daoCommon.findByAncestor(1L);
 
 		objects = results.toArray(new DBCommon[results.size()]);
-		Arrays.sort(objects);
 
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
@@ -66,7 +64,6 @@ public class MainActivity extends Activity {
 						List<DBCommon> results = daoCommon.findByAncestor(1L);
 
 						objects = results.toArray(new DBCommon[results.size()]);
-						Arrays.sort(objects);
 
 						updateListView();
 					}
@@ -114,7 +111,7 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.objectList) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 			menu.setHeaderTitle(objects[info.position].getName());
@@ -128,7 +125,7 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(final MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
 		int menuItemIndex = item.getItemId();
@@ -142,10 +139,34 @@ public class MainActivity extends Activity {
 
 		switch (menuItemIndex) {
 		case 0:
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle(listItemName);
+			alert.setMessage(R.string.button_edit_object_message);
+
+			final EditText input = new EditText(this);
+			input.setText(listItemName);
+
+			alert.setView(input);
+
+			alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// Requete pour modifier le nom d'un objet
+				}
+			});
+
+			alert.setNegativeButton(R.string.button_edit_object_cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// Canceled.
+				}
+			});
+
+			alert.show();
+
 			break;
 		case 1:
-			break;
-		case 2:
+			daoCommon.delete(objects[info.position]);
+			updateListView();
 			break;
 		default:
 			break;

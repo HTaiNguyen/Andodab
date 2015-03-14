@@ -36,10 +36,10 @@ public class DAOCommon implements DAO<DBCommon>{
 
 	@Override
 	public DBCommon read(Object id) {
-		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBCommon.ANCESTOR_ID}, "WHERE " + DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBCommon.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(DBObject.ANCESTOR_ID));
-		cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED}, "WHERE " + DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+		cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		String name = cursor.getString(cursor.getColumnIndex(DBCommon.NAME));
 		boolean sealed = cursor.getInt(cursor.getColumnIndex(DBCommon.SEALED)) > 0;
@@ -57,9 +57,9 @@ public class DAOCommon implements DAO<DBCommon>{
 				Long id = cursor.getLong(cursor.getColumnIndex(DBCommon.ID));
 				String name = cursor.getString(cursor.getColumnIndex(DBCommon.NAME));
 				boolean sealed = cursor.getInt(cursor.getColumnIndex(DBCommon.SEALED)) > 0;
-				Cursor cursor2 = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBCommon.ANCESTOR_ID}, "WHERE " + DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+				Cursor cursor2 = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBCommon.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
 				cursor2.moveToFirst();
-				long ancestorId = cursor2.getLong(cursor.getColumnIndex(DBObject.ANCESTOR_ID));
+				long ancestorId = cursor2.getLong(cursor2.getColumnIndex(DBObject.ANCESTOR_ID));
 
 				DBCommon dbCommon = new DBCommon(ancestorId, name, sealed);
 				dbCommon.setId(id);
@@ -108,9 +108,6 @@ public class DAOCommon implements DAO<DBCommon>{
 	public void delete(DBCommon dbCommon) {
 		ContentValues values = new ContentValues();
 		values.put(DBCommon.ID, dbCommon.getId());
-
-		contentResolver.delete(DBCommon.CONTENT_URI, "WHERE " + DBCommon.ID + " = ?", new String[]{dbCommon.getId()+""});
+		contentResolver.delete(DBCommon.CONTENT_URI, DBCommon.ID + " = ?", new String[] { dbCommon.getId().toString() });
 	}
-
-
 }
