@@ -87,8 +87,6 @@ public class MainActivity extends Activity {
 			}
 		});
 
-
-
 		updateListView();
 	}
 
