@@ -56,7 +56,7 @@ public class DAOCommon implements DAO<DBCommon>{
 
 	public List<DBCommon> findAll() {
 		ArrayList<DBCommon> dbCommons = new ArrayList<>();
-		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[] { DBCommon.NAME, DBCommon.SEALED, DBCommon.ID }, null, null, null);
+		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[] { DBCommon.NAME, DBCommon.SEALED, DBCommon.ID }, null, null, DBCommon.NAME);
 
 		if (cursor.moveToFirst()) {
 			do {
@@ -80,7 +80,7 @@ public class DAOCommon implements DAO<DBCommon>{
 
 	public List<DBCommon> findByAncestor(Long ancestorId) {
 		ArrayList<DBCommon> dbCommons = new ArrayList<DBCommon>();
-		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[] { DBCommon.NAME, DBCommon.SEALED, DBCommon.ID }, null, null, null);
+		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[] { DBCommon.NAME, DBCommon.SEALED, DBCommon.ID }, null, null, DBCommon.NAME);
 
 		if (cursor.moveToFirst()) {
 			do {

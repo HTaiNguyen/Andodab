@@ -1,6 +1,5 @@
 package fr.upem.andodab;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,13 +27,12 @@ import android.widget.ListView;
 public class MainActivity extends Activity {
 	private DBManager dbManager;
 	private DAOCommon daoCommon;
-	private DBCommon[] objects;
 	private Button addButtonObject;
-	private ListView listViewObjects;
 	private ListAdapter adapter;
+	private ListView listViewObjects;
 
-	private class ListAdapter extends ArrayAdapter<String> {
-		public ListAdapter(Context context, int resource, List<String> objects) {
+	private class ListAdapter extends ArrayAdapter<DBCommon> {
+		public ListAdapter(Context context, int resource, List<DBCommon> objects) {
 			super(context, resource, objects);
 		}
 
@@ -44,10 +42,10 @@ public class MainActivity extends Activity {
 
 			this.setNotifyOnChange(false);
 
-			this.sort(new Comparator<String>() {
+			this.sort(new Comparator<DBCommon>() {
 				@Override
-				public int compare(String lhs, String rhs) {
-					return lhs.compareTo(rhs);
+				public int compare(DBCommon c1, DBCommon c2) {
+					return c1.getName().compareTo(c2.getName());
 				}
 			});
 
@@ -68,10 +66,6 @@ public class MainActivity extends Activity {
 
 		daoCommon = new DAOCommon(getContentResolver());
 
-		List<DBCommon> results = daoCommon.findByAncestor(1L);
-
-		objects = results.toArray(new DBCommon[results.size()]);
-
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
 			@Override
@@ -88,11 +82,7 @@ public class MainActivity extends Activity {
 						DBCommon common = new DBCommon(1L, name, false);
 						daoCommon.create(common);
 
-						List<DBCommon> results = daoCommon.findByAncestor(1L);
-
-						objects = results.toArray(new DBCommon[results.size()]);
-
-						adapter.add(name);
+						adapter.add(common);
 						adapter.notifyDataSetChanged();
 					}
 				});
@@ -111,18 +101,11 @@ public class MainActivity extends Activity {
 		listViewObjects.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
+				
 			}
 		});
 
-		ArrayList<String> objectsName = new ArrayList<>();
-
-		for (int i = 0; i < objects.length; i++) {
-			objectsName.add(objects[i].getName());
-		}
-
-
-		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
+		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, daoCommon.findByAncestor(1L));
 		listViewObjects.setAdapter(adapter);
 		registerForContextMenu(listViewObjects);
 	}
@@ -149,7 +132,7 @@ public class MainActivity extends Activity {
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
 		if (v.getId() == R.id.objectList) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			menu.setHeaderTitle(objects[info.position].getName());
+			menu.setHeaderTitle(adapter.getItem(info.position).getName());
 
 			String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
 
@@ -165,7 +148,7 @@ public class MainActivity extends Activity {
 
 		int menuItemIndex = item.getItemId();
 
-		String listItemName = objects[info.position].getName();
+		final String listItemName = adapter.getItem(info.position).getName();
 
 		switch (menuItemIndex) {
 		case 0:
@@ -177,11 +160,14 @@ public class MainActivity extends Activity {
 			alert.setView(input);
 			alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
-					DBCommon common = objects[info.position];
+					DBCommon common = adapter.getItem(info.position);
 					String name = input.getText().toString();
 
 					common.setName(name);
 					daoCommon.udpate(common);
+
+					adapter.getItem(info.position).setName(name);
+					adapter.notifyDataSetChanged();
 				}
 			});
 
@@ -195,11 +181,11 @@ public class MainActivity extends Activity {
 
 			break;
 		case 1:
-			DBCommon common = objects[info.position];
+			DBCommon common = adapter.getItem(info.position);
 
 			daoCommon.delete(common);
 
-			adapter.remove(common.getName());
+			adapter.remove(common);
 			adapter.notifyDataSetChanged();
 
 			break;
@@ -208,5 +194,9 @@ public class MainActivity extends Activity {
 		}
 
 		return true;
+	}
+
+	public void updateListView(List<DBCommon> objects) {
+
 	}
 }

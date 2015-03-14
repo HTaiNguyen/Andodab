@@ -1,8 +1,10 @@
 package fr.upem.andodab.db;
 
+import java.util.Comparator;
+
 import android.net.Uri;
 
-public class DBCommon extends DBObject{
+public class DBCommon extends DBObject {
 	public static final String TABLE_NAME = "common";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + DBManager.AUTHORITY + "/" + TABLE_NAME);
 	public static final String MIME = "vnd.android.cursor.item/vnd." + DBManager.AUTHORITY + "." + TABLE_NAME;
@@ -21,6 +23,11 @@ public class DBCommon extends DBObject{
 
 		this.name = name;
 		this.sealed = sealed;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 	public String getName() {
