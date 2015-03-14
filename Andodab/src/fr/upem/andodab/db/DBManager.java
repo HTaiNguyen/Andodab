@@ -29,7 +29,7 @@ public class DBManager extends ContentProvider {
 	public static final String SQL_CREATE_TABLE_COMMON = 
 			"CREATE TABLE IF NOT EXISTS " + DBCommon.TABLE_NAME + " (" + 
 					DBCommon.ID + " INTEGER, " +
-					DBCommon.NAME + " VARCHAR(255), " + 
+					DBCommon.NAME + " VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE, " + 
 					DBCommon.SEALED + " BOOLEAN," + 
 					"PRIMARY KEY (" + DBCommon.ID + ")" +
 					");";
