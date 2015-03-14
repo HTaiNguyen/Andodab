@@ -1,10 +1,6 @@
 package test;
 
-
 import fr.upem.andodab.R;
-import fr.upem.andodab.R.id;
-import fr.upem.andodab.R.layout;
-import fr.upem.andodab.R.menu;
 import fr.upem.andodab.notification.BroadcastManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -67,9 +63,9 @@ public class NotificationActivity extends Activity {
 					PackageManager pm = NotificationActivity.this.getPackageManager();
 					ComponentName componentName = new ComponentName(
 							NotificationActivity.this, BroadcastManager.class);
-//					pm.setComponentEnabledSetting(componentName,
-//							PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-//							PackageManager.DONT_KILL_APP);
+					pm.setComponentEnabledSetting(componentName,
+							PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+							PackageManager.DONT_KILL_APP);
 					Toast.makeText(getApplicationContext(),
 							"Broadcast Receiver Started", Toast.LENGTH_LONG)
 							.show();
@@ -78,9 +74,9 @@ public class NotificationActivity extends Activity {
 					PackageManager pm = NotificationActivity.this.getPackageManager();
 					ComponentName componentName = new ComponentName(
 							NotificationActivity.this, BroadcastManager.class);
-//					pm.setComponentEnabledSetting(componentName,
-//							PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-//							PackageManager.DONT_KILL_APP);
+					pm.setComponentEnabledSetting(componentName,
+							PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+							PackageManager.DONT_KILL_APP);
 					Toast.makeText(getApplicationContext(),
 							"Broadcast Receiver Stopped", Toast.LENGTH_LONG)
 							.show();
