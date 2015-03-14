@@ -51,7 +51,7 @@ public class DAOCommon implements DAO<DBCommon>{
 
 	public List<DBCommon> findAll() {
 		ArrayList<DBCommon> dbCommons = new ArrayList<DBCommon>();
-		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED, DBCommon.ID}, null, null, null);
+		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED, DBCommon.ID}, null, null, DBCommon.NAME);
 		if (cursor.moveToFirst()) {
 			do {
 				Long id = cursor.getLong(cursor.getColumnIndex(DBCommon.ID));
@@ -74,7 +74,7 @@ public class DAOCommon implements DAO<DBCommon>{
 
 	public List<DBCommon> findByAncestor(Long ancestorId) {
 		ArrayList<DBCommon> dbCommons = new ArrayList<DBCommon>();
-		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED, DBCommon.ID}, null, null, null);
+		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[]{DBCommon.NAME, DBCommon.SEALED, DBCommon.ID}, null, null, DBCommon.NAME);
 		if (cursor.moveToFirst()) {
 			do {
 				Long id = cursor.getLong(cursor.getColumnIndex(DBCommon.ID));
@@ -99,6 +99,8 @@ public class DAOCommon implements DAO<DBCommon>{
 		ContentValues values = new ContentValues();
 		values.put(DBCommon.ID, dbCommon.getId());
 		values.put(DBCommon.ANCESTOR_ID, dbCommon.getAncestorId());
+		contentResolver.update(DBObject.CONTENT_URI, values, null, null);
+		values.remove(DBCommon.ANCESTOR_ID);
 		values.put(DBCommon.NAME, dbCommon.getName());
 		values.put(DBCommon.SEALED, dbCommon.isSealed());
 		contentResolver.update(DBCommon.CONTENT_URI, values, null, null);

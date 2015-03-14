@@ -33,10 +33,10 @@ public class DAOFloat implements DAO<DBFloat>{
 
 	@Override
 	public DBFloat read(Object id) {
-		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBFloat.ANCESTOR_ID}, "WHERE " + DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBFloat.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(DBFloat.ANCESTOR_ID));
-		cursor = contentResolver.query(DBFloat.CONTENT_URI, new String[]{DBFloat.VALUE}, "WHERE " + DBFloat.ID + " = ?", new String[]{id.toString()}, null);
+		cursor = contentResolver.query(DBFloat.CONTENT_URI, new String[]{DBFloat.VALUE}, DBFloat.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		Float value = cursor.getFloat(cursor.getColumnIndex(DBFloat.VALUE));
 		
@@ -60,7 +60,7 @@ public class DAOFloat implements DAO<DBFloat>{
 		ContentValues values = new ContentValues();
 		values.put(DBCommon.ID, dbFloat.getId());
 		
-		contentResolver.delete(DBFloat.CONTENT_URI, "WHERE " + DBFloat.ID + " = ?", new String[]{dbFloat.getId()+""});
+		contentResolver.delete(DBFloat.CONTENT_URI, DBFloat.ID + " = ?", new String[]{dbFloat.getId()+""});
 	}
 
 }
