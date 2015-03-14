@@ -1,9 +1,6 @@
 package fr.upem.andodab;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import fr.upem.andodab.dao.DAOCommon;
@@ -12,7 +9,6 @@ import fr.upem.andodab.db.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -21,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,32 +25,29 @@ import android.widget.ListView;
 
 public class MainActivity extends Activity {
 	private DBManager dbManager;
+	private DAOCommon daoCommon;
 	private DBCommon[] objects;
+	private Button addButtonObject;
+	private ListView listViewObjects;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		deleteDatabase(DBManager.DB_NAME);
+		//deleteDatabase(DBManager.DB_NAME);
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
 
-		final DAOCommon daoCommon = new DAOCommon(getContentResolver());
-		daoCommon.create(new DBCommon(null, "Root", false));
-		daoCommon.create(new DBCommon(1L, "Float", false));
-		daoCommon.create(new DBCommon(1L, "Int", false));
-		daoCommon.create(new DBCommon(1L, "String", false));
-		daoCommon.create(new DBCommon(1L, "Food", false));
-		daoCommon.create(new DBCommon(1L, "Animal", false));
+		daoCommon = new DAOCommon(getContentResolver());
 
 		List<DBCommon> results = daoCommon.findByAncestor(1L);
 
 		objects = results.toArray(new DBCommon[results.size()]);
 		Arrays.sort(objects);
 
-		final Button addButtonObject = (Button) findViewById(R.id.addButtonObject);
+		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
@@ -65,18 +58,17 @@ public class MainActivity extends Activity {
 				alert.setView(input);
 				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-						long id = 0;
 						String name = input.getText().toString();
 
 						DBCommon common = new DBCommon(1L, name, false);
-						id = common.getId();
-
 						daoCommon.create(common);
 
-						DBCommon[] newObjects = Arrays.copyOf(objects, objects.length + 1);
-						newObjects[objects.length] = common;
-						objects = newObjects;
+						List<DBCommon> results = daoCommon.findByAncestor(1L);
+
+						objects = results.toArray(new DBCommon[results.size()]);
 						Arrays.sort(objects);
+
+						updateListView();
 					}
 				});
 
@@ -90,17 +82,17 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		final ListView listview = (ListView) findViewById(R.id.objectList);
+		listViewObjects = (ListView) findViewById(R.id.objectList);
+		listViewObjects.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-		String[] objectsName = new String[objects.length];
-		
-		for (int i = 0; i < objects.length; i++) {
-			objectsName[i] = objects[i].getName();
-		}
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
-		listview.setAdapter(adapter);
-		registerForContextMenu(listview);
+			}
+		});
+
+
+
+		updateListView();
 	}
 
 	@Override
@@ -160,5 +152,18 @@ public class MainActivity extends Activity {
 		}
 
 		return true;
+	}
+
+	public void updateListView() {
+		String[] objectsName = new String[objects.length];
+
+		for (int i = 0; i < objects.length; i++) {
+			objectsName[i] = objects[i].getName();
+		}
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
+		listViewObjects.setAdapter(adapter);
+
+		registerForContextMenu(listViewObjects);
 	}
 }
