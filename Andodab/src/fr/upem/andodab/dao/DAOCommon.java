@@ -57,6 +57,7 @@ public class DAOCommon implements DAO<DBCommon>{
 	public List<DBCommon> findAll() {
 		ArrayList<DBCommon> dbCommons = new ArrayList<>();
 		Cursor cursor = contentResolver.query(DBCommon.CONTENT_URI, new String[] { DBCommon.NAME, DBCommon.SEALED, DBCommon.ID }, null, null, null);
+
 		if (cursor.moveToFirst()) {
 			do {
 				Long id = cursor.getLong(cursor.getColumnIndex(DBCommon.ID));

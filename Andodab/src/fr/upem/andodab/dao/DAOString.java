@@ -33,10 +33,10 @@ public class DAOString implements DAO<DBString> {
 
 	@Override
 	public DBString read(Object id) {
-		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBString.ANCESTOR_ID}, "WHERE " + DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBString.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(DBString.ANCESTOR_ID));
-		cursor = contentResolver.query(DBString.CONTENT_URI, new String[]{DBString.VALUE}, "WHERE " + DBString.ID + " = ?", new String[]{id.toString()}, null);
+		cursor = contentResolver.query(DBString.CONTENT_URI, new String[]{DBString.VALUE}, DBString.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		String value = cursor.getString(cursor.getColumnIndex(DBString.VALUE));
 		
@@ -59,7 +59,7 @@ public class DAOString implements DAO<DBString> {
 		ContentValues values = new ContentValues();
 		values.put(DBCommon.ID, dbString.getId());
 		
-		contentResolver.delete(DBString.CONTENT_URI, "WHERE " + DBString.ID + " = ?", new String[]{dbString.getId()+""});
+		contentResolver.delete(DBString.CONTENT_URI, DBString.ID + " = ?", new String[]{dbString.getId()+""});
 		
 	}
 

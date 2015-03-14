@@ -28,7 +28,7 @@ public class DAODictionary implements DAO<DBDictionary>{
 
 	@Override
 	public DBDictionary read(Object id) {
-		Cursor cursor = contentResolver.query(DBDictionary.CONTENT_URI, new String[]{DBDictionary.OBJECT_ID, DBDictionary.KEY, DBDictionary.VALUE_ID}, "WHERE " + DBDictionary.ID + " = ?", new String[]{id.toString()}, null);
+		Cursor cursor = contentResolver.query(DBDictionary.CONTENT_URI, new String[]{DBDictionary.OBJECT_ID, DBDictionary.KEY, DBDictionary.VALUE_ID}, DBDictionary.ID + " = ?", new String[]{id.toString()}, null);
 		cursor.moveToFirst();
 		long ownerId = cursor.getLong(cursor.getColumnIndex(DBDictionary.OBJECT_ID));
 		String key = cursor.getString(cursor.getColumnIndex(DBDictionary.KEY));
@@ -56,7 +56,7 @@ public class DAODictionary implements DAO<DBDictionary>{
 		ContentValues values = new ContentValues();
 		values.put(DBDictionary.ID, dbDictionary.getId());
 		
-		contentResolver.delete(DBDictionary.CONTENT_URI, "WHERE " + DBDictionary.ID + " = ?", new String[]{dbDictionary.getId()+""});
+		contentResolver.delete(DBDictionary.CONTENT_URI, DBDictionary.ID + " = ?", new String[]{dbDictionary.getId()+""});
 	}
 
 }
