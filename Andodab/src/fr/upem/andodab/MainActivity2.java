@@ -91,7 +91,7 @@ public class MainActivity2 extends Activity {
 							return;
 						}
 
-						DBCommon common = new DBCommon(1L, name, false);
+						DBCommon common = new DBCommon(currentId, name, false);
 
 						try {
 							daoCommon.create(common);
