@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private DBManager dbManager;
@@ -66,11 +68,13 @@ public class MainActivity extends Activity {
 		dbManager.onCreate();
 
 		daoCommon = new DAOCommon(getContentResolver());
-		daoCommon.create(new DBCommon(null, "Root", false));
-		daoCommon.create(new DBCommon(1L, "Float", false));
-		daoCommon.create(new DBCommon(1L, "Int", false));
-		daoCommon.create(new DBCommon(1L, "String", false));
-		
+
+		try {
+			DBInit();
+		} catch (Exception e) {
+			// Erreur d'initialisation
+		}
+
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
 			@Override
@@ -84,11 +88,24 @@ public class MainActivity extends Activity {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String name = input.getText().toString();
 
-						DBCommon common = new DBCommon(1L, name, false);
-						daoCommon.create(common);
+						if (name.isEmpty()) {
+							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+							toast.show();
 
-						adapter.add(common);
-						adapter.notifyDataSetChanged();
+							return;
+						}
+
+						DBCommon common = new DBCommon(1L, name, false);
+
+						try {
+							daoCommon.create(common);
+
+							adapter.add(common);
+							adapter.notifyDataSetChanged();
+						} catch (Exception e) {
+							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+							toast.show();
+						}
 					}
 				});
 
@@ -102,19 +119,30 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		List<DBCommon> commonsList = daoCommon.findByAncestor(1L);
+
+		adapter = null;
+
+		if (commonsList.size() > 0) {
+			adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, commonsList);
+		}
+
 		listViewObjects = (ListView) findViewById(R.id.objectList);
+		listViewObjects.setBackgroundColor(Color.LTGRAY);
 		listViewObjects.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				long id = adapter.getItem(position).getId();
+				String name = adapter.getItem(position).getName();
 
 				Intent intent = new Intent(getBaseContext(), MainActivity2.class);
 				intent.putExtra("id", id);
+				intent.putExtra("name", name);
 				startActivity(intent);
 			}
 		});
 
-		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, daoCommon.findByAncestor(1L));
+		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, commonsList);
 		listViewObjects.setAdapter(adapter);
 		registerForContextMenu(listViewObjects);
 	}
@@ -173,10 +201,16 @@ public class MainActivity extends Activity {
 					String name = input.getText().toString();
 
 					common.setName(name);
-					daoCommon.udpate(common);
 
-					adapter.getItem(info.position).setName(name);
-					adapter.notifyDataSetChanged();
+					try {
+						daoCommon.udpate(common);
+
+						adapter.getItem(info.position).setName(name);
+						adapter.notifyDataSetChanged();
+					} catch (Exception e) {
+						Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+						toast.show();
+					}
 				}
 			});
 
@@ -192,14 +226,32 @@ public class MainActivity extends Activity {
 		case 1:
 			DBCommon common = adapter.getItem(info.position);
 
-			daoCommon.delete(common);
+			try {
+				daoCommon.delete(common);
 
-			adapter.remove(common);
-			adapter.notifyDataSetChanged();
+				adapter.remove(common);
+				adapter.notifyDataSetChanged();
+			} catch (Exception e) {
+				Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+				toast.show();
+			}
 
 			break;
 		default:
 			break;
+		}
+
+		return true;
+	}
+
+	public boolean DBInit() throws Exception {
+		try {
+			daoCommon.create(new DBCommon(null, "Root", false));
+			daoCommon.create(new DBCommon(1L, "Float", false));
+			daoCommon.create(new DBCommon(1L, "Int", false));
+			daoCommon.create(new DBCommon(1L, "String", false));
+		} catch (Exception e) {
+			throw new Exception(e); 
 		}
 
 		return true;

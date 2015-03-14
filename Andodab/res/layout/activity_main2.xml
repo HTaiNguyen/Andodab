@@ -24,6 +24,16 @@
         android:layout_marginBottom="20dp"
         android:text="@string/button_add_key" />
 
+    <TextView
+        android:id="@+id/messageKeyList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addButtonKey"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/message_key_list" />
+
     <ListView
         android:id="@+id/keyList"
         android:layout_width="fill_parent"
@@ -38,6 +48,16 @@
         android:layout_below="@+id/keyList"
         android:layout_marginBottom="20dp"
         android:text="@string/button_add_object" />
+
+    <TextView
+        android:id="@+id/messageObjectList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addButtonObject"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/message_object_list" />
 
     <ListView
         android:id="@+id/objectList"

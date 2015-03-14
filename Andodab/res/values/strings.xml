@@ -14,4 +14,8 @@
     <string name="button_add_key">Add an attribute</string>
     <string name="button_add_key_title">Add an attribute</string>
     <string name="button_add_key_message">Attribute name</string>
-</resources>
+    <string name="error_message">An error has occurred</string>
+    <string name="message_object_list">No object</string>
+    <string name="message_key_list">No attribute</string>
+
+</resources>

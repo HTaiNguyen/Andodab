@@ -14,5 +14,8 @@
     <string name="button_add_key">Ajouter un attribut</string>
     <string name="button_add_key_title">Ajouter un attribut</string>
     <string name="button_add_key_message">Nom de l\'attribut</string>
+    <string name="error_message">Une erreur s\'est produite</string>
+    <string name="message_object_list">Aucun objet</string>
+    <string name="message_key_list">Aucun attribut</string>
 
 </resources>

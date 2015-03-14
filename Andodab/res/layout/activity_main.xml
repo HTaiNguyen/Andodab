@@ -24,6 +24,16 @@
         android:layout_marginBottom="20dp"
         android:text="@string/button_add_object" />
 
+    <TextView
+        android:id="@+id/messageObjectList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addButtonObject"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="@string/message_object_list" />
+
     <ListView
         android:id="@+id/objectList"
         android:layout_width="fill_parent"
