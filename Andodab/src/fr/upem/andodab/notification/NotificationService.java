@@ -36,7 +36,6 @@ public class NotificationService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ACTION);
 		registerReceiver(notificationServiceReceiver, intentFilter);
@@ -60,7 +59,7 @@ public class NotificationService extends Service {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		notificationManager.notify(0, notification); 
-
+		
 		return super.onStartCommand(intent, flags, startId);
 	}
 
