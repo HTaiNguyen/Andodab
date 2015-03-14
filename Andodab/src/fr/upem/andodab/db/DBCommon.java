@@ -1,7 +1,5 @@
 package fr.upem.andodab.db;
 
-import java.util.Comparator;
-
 import android.net.Uri;
 
 public class DBCommon extends DBObject {

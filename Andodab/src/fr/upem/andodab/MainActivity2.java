@@ -13,19 +13,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class MainActivity extends Activity {
+public class MainActivity2 extends Activity {
+	private long currentId;
 	private DBManager dbManager;
 	private DAOCommon daoCommon;
 	private Button addButtonObject;
@@ -58,33 +59,30 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main2);
 
-		//deleteDatabase(DBManager.DB_NAME);
+		Bundle bundle = getIntent().getExtras();
+		currentId = bundle.getLong("id");
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
 
 		daoCommon = new DAOCommon(getContentResolver());
-		daoCommon.create(new DBCommon(null, "Root", false));
-		daoCommon.create(new DBCommon(1L, "Float", false));
-		daoCommon.create(new DBCommon(1L, "Int", false));
-		daoCommon.create(new DBCommon(1L, "String", false));
-		
+
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
 				alert.setTitle(R.string.button_add_object_title);
 				alert.setMessage(R.string.button_add_object_message);
-				final EditText input = new EditText(MainActivity.this);
+				final EditText input = new EditText(MainActivity2.this);
 				alert.setView(input);
 				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String name = input.getText().toString();
 
-						DBCommon common = new DBCommon(1L, name, false);
+						DBCommon common = new DBCommon(currentId, name, false);
 						daoCommon.create(common);
 
 						adapter.add(common);
@@ -114,7 +112,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, daoCommon.findByAncestor(1L));
+		adapter = new ListAdapter(MainActivity2.this, android.R.layout.simple_list_item_1, daoCommon.findByAncestor(currentId));
 		listViewObjects.setAdapter(adapter);
 		registerForContextMenu(listViewObjects);
 	}
@@ -161,10 +159,10 @@ public class MainActivity extends Activity {
 
 		switch (menuItemIndex) {
 		case 0:
-			AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+			AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
 			alert.setTitle(R.string.button_edit_object_message);
 			alert.setMessage(R.string.button_edit_object_message);
-			final EditText input = new EditText(MainActivity.this);
+			final EditText input = new EditText(MainActivity2.this);
 			input.setText(listItemName);
 			alert.setView(input);
 			alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {

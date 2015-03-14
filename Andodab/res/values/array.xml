@@ -2,8 +2,8 @@
 <resources>
 
     <array name="objectListMenu">
-        <item>Modifier</item>
-        <item>Supprimer</item>
+        <item>Edit</item>
+        <item>Remove</item>
     </array>
 
 </resources>

@@ -10,5 +10,9 @@
     <string name="button_edit_object_message">Veuillez modifier le nom de l\'objet</string>
     <string name="button_edit_object_ok">OK</string>
     <string name="button_edit_object_cancel">Annuler</string>
+    <string name="title_activity_main_activity2">Andodab</string>
+    <string name="button_add_key">Ajouter un attribut</string>
+    <string name="button_add_key_title">Ajouter un attribut</string>
+    <string name="button_add_key_message">Nom de l\'attribut</string>
 
 </resources>
