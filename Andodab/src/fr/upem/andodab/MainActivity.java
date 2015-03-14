@@ -8,6 +8,7 @@ import fr.upem.andodab.db.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -66,6 +67,7 @@ public class MainActivity extends Activity {
 						objects = results.toArray(new DBCommon[results.size()]);
 
 						updateListView();
+						refreshActivity();
 					}
 				});
 
@@ -86,8 +88,6 @@ public class MainActivity extends Activity {
 
 			}
 		});
-
-
 
 		updateListView();
 	}
@@ -167,6 +167,7 @@ public class MainActivity extends Activity {
 		case 1:
 			daoCommon.delete(objects[info.position]);
 			updateListView();
+			refreshActivity();
 			break;
 		default:
 			break;
@@ -186,5 +187,14 @@ public class MainActivity extends Activity {
 		listViewObjects.setAdapter(adapter);
 
 		registerForContextMenu(listViewObjects);
+	}
+	
+	public void refreshActivity() {
+		Intent intent = getIntent();
+		overridePendingTransition(0, 0);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		finish();
+		overridePendingTransition(0, 0);
+		startActivity(intent);
 	}
 }
