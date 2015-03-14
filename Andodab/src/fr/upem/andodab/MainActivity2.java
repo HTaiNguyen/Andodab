@@ -31,7 +31,9 @@ public class MainActivity2 extends Activity {
 	private long currentId;
 	private DBManager dbManager;
 	private DAOCommon daoCommon;
+	private Button addButtonKey;
 	private Button addButtonObject;
+	private ListView keyList;
 	private ListView listViewObjects;
 	private ListAdapter adapter;
 
@@ -70,6 +72,53 @@ public class MainActivity2 extends Activity {
 		dbManager.onCreate();
 
 		daoCommon = new DAOCommon(getContentResolver());
+
+		addButtonKey = (Button) findViewById(R.id.addButtonKey);
+		addButtonKey.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
+				alert.setTitle(R.string.button_add_key_title);
+				alert.setMessage(R.string.button_add_key_message);
+				final EditText input = new EditText(MainActivity2.this);
+				alert.setView(input);
+				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String name = input.getText().toString();
+
+						if (name.isEmpty()) {
+							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+							toast.show();
+
+							return;
+						}
+
+						/*DBCommon common = new DBCommon(currentId, name, false);
+
+						try {
+							daoCommon.create(common);
+
+							adapter.add(common);
+							adapter.notifyDataSetChanged();
+						} catch (Exception e) {
+							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+							toast.show();
+						}*/
+					}
+				});
+
+				alert.setNegativeButton(R.string.button_edit_object_cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
+
+				alert.show();
+			}
+		});
+		
+		keyList = (ListView) findViewById(R.id.keyList);
+		keyList.setBackgroundColor(Color.LTGRAY);
 
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
@@ -168,6 +217,15 @@ public class MainActivity2 extends Activity {
 			menu.setHeaderTitle(adapter.getItem(info.position).getName());
 
 			String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
+
+			for (int i = 0; i<menuItems.length; i++) {
+				menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		} else if (v.getId() == R.id.keyList) {
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+			menu.setHeaderTitle(adapter.getItem(info.position).getName());
+
+			String[] menuItems = getResources().getStringArray(R.array.keyListMenu);
 
 			for (int i = 0; i<menuItems.length; i++) {
 				menu.add(Menu.NONE, i, i, menuItems[i]);
