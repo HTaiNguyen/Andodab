@@ -14,7 +14,10 @@
     <string name="title_activity_main_activity2">Andodab</string>
     <string name="button_add_key">Add an attribute</string>
     <string name="button_add_key_title">Add an attribute</string>
-    <string name="button_add_key_message">Attribute name</string>
+    <string name="button_add_key_name">Name of attribute :</string>
+    <string name="button_add_key_type">Type of object :</string>
+    <string name="button_add_key_objects">List of objects :</string>
+    <string name="button_add_key_value">Value :</string>
     <string name="error_message">An error has occurred</string>
     <string name="message_object_list">No object</string>
     <string name="message_key_list">No attribute</string>
