@@ -1,5 +1,7 @@
 package fr.upem.andodab;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import fr.upem.andodab.dao.DAOCommon;
@@ -7,8 +9,8 @@ import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -29,13 +31,37 @@ public class MainActivity extends Activity {
 	private DBCommon[] objects;
 	private Button addButtonObject;
 	private ListView listViewObjects;
+	private ListAdapter adapter;
+
+	private class ListAdapter extends ArrayAdapter<String> {
+		public ListAdapter(Context context, int resource, List<String> objects) {
+			super(context, resource, objects);
+		}
+
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+
+			this.setNotifyOnChange(false);
+
+			this.sort(new Comparator<String>() {
+				@Override
+				public int compare(String lhs, String rhs) {
+					return lhs.compareTo(rhs);
+				}
+			});
+
+			this.setNotifyOnChange(true);
+		}
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//deleteDatabase(DBManager.DB_NAME);
+		deleteDatabase(DBManager.DB_NAME);
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
@@ -66,8 +92,8 @@ public class MainActivity extends Activity {
 
 						objects = results.toArray(new DBCommon[results.size()]);
 
-						updateListView();
-						refreshActivity();
+						adapter.add(name);
+						adapter.notifyDataSetChanged();
 					}
 				});
 
@@ -89,7 +115,16 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		updateListView();
+		ArrayList<String> objectsName = new ArrayList<>();
+
+		for (int i = 0; i < objects.length; i++) {
+			objectsName.add(objects[i].getName());
+		}
+
+
+		adapter = new ListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
+		listViewObjects.setAdapter(adapter);
+		registerForContextMenu(listViewObjects);
 	}
 
 	@Override
@@ -126,32 +161,27 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onContextItemSelected(final MenuItem item) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
 		int menuItemIndex = item.getItemId();
 
-		String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
-		String menuItemName = menuItems[menuItemIndex];
 		String listItemName = objects[info.position].getName();
-
-		System.out.println(menuItemIndex);
-		System.out.println("Selected " + menuItemName + " for item " + listItemName);
 
 		switch (menuItemIndex) {
 		case 0:
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-			alert.setTitle(listItemName);
+			AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+			alert.setTitle(R.string.button_edit_object_message);
 			alert.setMessage(R.string.button_edit_object_message);
-
-			final EditText input = new EditText(this);
+			final EditText input = new EditText(MainActivity.this);
 			input.setText(listItemName);
-
 			alert.setView(input);
-
 			alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
-					// Requete pour modifier le nom d'un objet
+					DBCommon common = objects[info.position];
+					String name = input.getText().toString();
+
+					common.setName(name);
+					daoCommon.udpate(common);
 				}
 			});
 
@@ -165,36 +195,18 @@ public class MainActivity extends Activity {
 
 			break;
 		case 1:
-			daoCommon.delete(objects[info.position]);
-			updateListView();
-			refreshActivity();
+			DBCommon common = objects[info.position];
+
+			daoCommon.delete(common);
+
+			adapter.remove(common.getName());
+			adapter.notifyDataSetChanged();
+
 			break;
 		default:
 			break;
 		}
 
 		return true;
-	}
-
-	public void updateListView() {
-		String[] objectsName = new String[objects.length];
-
-		for (int i = 0; i < objects.length; i++) {
-			objectsName[i] = objects[i].getName();
-		}
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, objectsName);
-		listViewObjects.setAdapter(adapter);
-
-		registerForContextMenu(listViewObjects);
-	}
-	
-	public void refreshActivity() {
-		Intent intent = getIntent();
-		overridePendingTransition(0, 0);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		finish();
-		overridePendingTransition(0, 0);
-		startActivity(intent);
 	}
 }

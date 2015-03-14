@@ -10,13 +10,13 @@ public abstract class DBObject implements BaseColumns {
 
 	public static final String ID = "id";
 	public static final String ANCESTOR_ID = "ancestor_id";
-	
+
 	private Long id;
 	private Long ancestorId;
-	
+
 	public DBObject() {
 	}
-	
+
 	public DBObject(Long ancestorId) {
 		this.ancestorId = ancestorId;
 	}
@@ -36,5 +36,4 @@ public abstract class DBObject implements BaseColumns {
 	public void setAncestorId(Long ancestorId) {
 		this.ancestorId = ancestorId;
 	}
-	
 }
