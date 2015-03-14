@@ -24,7 +24,7 @@ public class DAOString implements DAO<DBString> {
 		Uri  uri = contentResolver.insert(DBObject.CONTENT_URI, values);	
 		
 		dbString.setId(ContentUris.parseId(uri));
-		
+		values.clear();		
 		values.put(DBString.ID, dbString.getId());
 		values.put(DBString.VALUE, dbString.getValue());
 		

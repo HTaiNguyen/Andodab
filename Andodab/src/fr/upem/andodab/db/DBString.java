@@ -12,7 +12,7 @@ public class DBString extends DBObject{
 	
 	private String value;
 
-	public DBString(long ancestorId, String value) {
+	public DBString(Long ancestorId, String value) {
 		super(ancestorId);
 		this.value = value;
 	}

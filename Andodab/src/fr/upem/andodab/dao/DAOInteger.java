@@ -24,7 +24,7 @@ public class DAOInteger implements DAO<DBInteger>{
 		Uri  uri = contentResolver.insert(DBObject.CONTENT_URI, values);	
 		
 		dbInteger.setId(ContentUris.parseId(uri));
-		
+		values.clear();		
 		values.put(DBInteger.ID, dbInteger.getId());
 		values.put(DBInteger.VALUE, dbInteger.getValue());
 		

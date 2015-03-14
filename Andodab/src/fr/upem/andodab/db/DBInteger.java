@@ -10,21 +10,21 @@ public class DBInteger extends DBObject{
 	public static final String ID = "id";
 	public static final String VALUE = "value";
 	
-	private long value;
+	private Long value;
 	
 	public DBInteger() {
 	}
 	
-	public DBInteger(long ancestorId, long value) {
+	public DBInteger(Long ancestorId, Long value) {
 		super(ancestorId);
 		this.value = value;
 	}
 
-	public long getValue() {
+	public Long getValue() {
 		return value;
 	}
 
-	public void setValue(long value) {
+	public void setValue(Long value) {
 		this.value = value;
 	}
 	

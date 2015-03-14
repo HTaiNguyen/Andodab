@@ -12,33 +12,33 @@ public class DBDictionary {
 	public static final String KEY = "key";
 	public static final String VALUE_ID = "value_id";
 	
-	private long id;
-	private long ownerId;
+	private Long id;
+	private Long ownerId;
 	private String key;
-	private long valueId;
+	private Long valueId;
 	
 	public DBDictionary() {
 	}
 	
-	public DBDictionary(long ownerId, String key, long valueId) {
+	public DBDictionary(Long ownerId, String key, Long valueId) {
 		this.ownerId  = ownerId;
 		this.key = key;
 		this.valueId = valueId;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getOwnerId() {
+	public Long getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwner(long ownerId) {
+	public void setOwner(Long ownerId) {
 		this.ownerId = ownerId;
 	}
 
@@ -50,11 +50,11 @@ public class DBDictionary {
 		this.key = key;
 	}
 
-	public long getValueId() {
+	public Long getValueId() {
 		return valueId;
 	}
 
-	public void setValue(long valueId) {
+	public void setValue(Long valueId) {
 		this.valueId = valueId;
 	}
 	

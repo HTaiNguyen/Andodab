@@ -15,7 +15,7 @@ public class DBFloat extends DBObject{
 	public DBFloat() {
 	}
 	
-	public DBFloat(long ancestorId, float value) {
+	public DBFloat(Long ancestorId, float value) {
 		super(ancestorId);
 		this.value = value;
 	}

@@ -24,7 +24,7 @@ public class DAOFloat implements DAO<DBFloat>{
 		Uri  uri = contentResolver.insert(DBObject.CONTENT_URI, values);	
 		
 		dbFloat.setId(ContentUris.parseId(uri));
-		
+		values.clear();		
 		values.put(DBFloat.ID, dbFloat.getId());
 		values.put(DBFloat.VALUE, dbFloat.getValue());
 		

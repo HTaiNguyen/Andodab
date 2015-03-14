@@ -3,6 +3,8 @@ package fr.upem.andodab;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import fr.upem.andodab.dao.DAOCommon;
+import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
 import fr.upem.andodab.db.DBObject;
 import android.app.Activity;
@@ -32,25 +34,19 @@ public class MainActivity extends Activity {
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
-		
-		ContentValues values = new ContentValues();
 
-		values.putNull(DBObject.ANCESTOR_ID);
-		getContentResolver().insert(DBObject.CONTENT_URI, values);
-
-		values.put(DBObject.ANCESTOR_ID, 1);
-		getContentResolver().insert(DBObject.CONTENT_URI, values);
-
-		values.put(DBObject.ANCESTOR_ID, 2);
-		getContentResolver().insert(DBObject.CONTENT_URI, values);
+		DAOCommon daoCommon = new DAOCommon(getContentResolver());
+		daoCommon.create(new DBCommon(null, "Root", false));
+		daoCommon.create(new DBCommon(2L, "Food", false));
+		daoCommon.create(new DBCommon(2L, "Animal", false));
 
 		ArrayList<String> result = new ArrayList<String>();
-		String columns[] = new String[] { DBObject.ID, DBObject.ANCESTOR_ID};
-		Cursor cursor = getContentResolver().query(DBObject.CONTENT_URI, columns, null, null, null);
+		String columns[] = new String[] { DBCommon.ID, DBCommon.NAME};
+		Cursor cursor = getContentResolver().query(DBCommon.CONTENT_URI, columns, null, null, null);
 
 		if (cursor.moveToFirst()) {
 			do {
-				String name = cursor.getString(cursor.getColumnIndex(DBObject.ID));
+				String name = cursor.getString(cursor.getColumnIndex(DBCommon.NAME));
 				result.add(name);
 			} while (cursor.moveToNext());
 

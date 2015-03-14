@@ -17,7 +17,7 @@ public class DBCommon extends DBObject{
 		
 	}
 	
-	public DBCommon(long ancestorId, String name, boolean sealed) {
+	public DBCommon(Long ancestorId, String name, boolean sealed) {
 		super(ancestorId);
 		this.name = name;
 		this.sealed = sealed;

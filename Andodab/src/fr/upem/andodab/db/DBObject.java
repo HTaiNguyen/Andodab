@@ -11,29 +11,29 @@ public abstract class DBObject implements BaseColumns {
 	public static final String ID = "id";
 	public static final String ANCESTOR_ID = "ancestor_id";
 	
-	private long id;
-	private long ancestorId;
+	private Long id;
+	private Long ancestorId;
 	
 	public DBObject() {
 	}
 	
-	public DBObject(long ancestorId) {
+	public DBObject(Long ancestorId) {
 		this.ancestorId = ancestorId;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getAncestorId() {
+	public Long getAncestorId() {
 		return ancestorId;
 	}
 
-	public void setAncestorId(long ancestorId) {
+	public void setAncestorId(Long ancestorId) {
 		this.ancestorId = ancestorId;
 	}
 	
