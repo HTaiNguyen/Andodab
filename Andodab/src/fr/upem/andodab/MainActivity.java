@@ -6,9 +6,7 @@ import java.util.Arrays;
 import fr.upem.andodab.dao.DAOCommon;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
-import fr.upem.andodab.db.DBObject;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -37,8 +35,11 @@ public class MainActivity extends Activity {
 
 		DAOCommon daoCommon = new DAOCommon(getContentResolver());
 		daoCommon.create(new DBCommon(null, "Root", false));
-		daoCommon.create(new DBCommon(2L, "Food", false));
-		daoCommon.create(new DBCommon(2L, "Animal", false));
+		daoCommon.create(new DBCommon(1L, "Float", false));
+		daoCommon.create(new DBCommon(1L, "Int", false));
+		daoCommon.create(new DBCommon(1L, "String", false));
+		daoCommon.create(new DBCommon(1L, "Food", false));
+		daoCommon.create(new DBCommon(1L, "Animal", false));
 
 		ArrayList<String> result = new ArrayList<String>();
 		String columns[] = new String[] { DBCommon.ID, DBCommon.NAME};
