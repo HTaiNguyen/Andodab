@@ -16,6 +16,7 @@ import fr.upem.andodab.db.DBManager;
 import fr.upem.andodab.db.DBObject;
 import fr.upem.andodab.db.DBString;
 import fr.upem.andodab.gui.Diagram;
+import fr.upem.andodab.table.TableCommon;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -425,6 +426,7 @@ public class MainActivity2 extends Activity {
 
 			if (dictionary0.getValue().getType().equals("COMMON")) {
 				Intent intent = new Intent(getBaseContext(), Diagram.class);
+				intent.putExtra(TableCommon.COL_ID, dictionary0.getValue().getId());
 				startActivity(intent);
 			} else {
 				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);

@@ -35,26 +35,29 @@ public class TableCommon extends TableObject {
 					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
 	
-	public static final String SQL_INIT_TABLE = 
+	public static final String SQL_INSERT_ROOT = 
 				"INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
-					+ "VALUES("+ ROOT_ID + ", " + "NULL" + ", " + ROOT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
+					+ "VALUES("+ ROOT_ID + ", " + "NULL" + ", " + ROOT_NAME + ", "+ "1" + ");";
+	public static final String SQL_INSERT_INT = 
+				 "INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
-					+ "VALUES("+ INT_ID + ", " + ROOT_ID + ", " + INT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
+					+ "VALUES("+ INT_ID + ", " + ROOT_ID + ", " + INT_NAME + ", "+ "1" + ");";
+	public static final String SQL_INSERT_FLOAT = 
+				 "INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
-					+ "VALUES("+ FLOAT_ID + ", " + ROOT_ID + ", " + FLOAT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
+					+ "VALUES("+ FLOAT_ID + ", " + ROOT_ID + ", " + FLOAT_NAME + ", "+ "1" + ");";
+	public static final String SQL_INSERT_STRING = 
+				"INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
@@ -66,7 +69,10 @@ public class TableCommon extends TableObject {
 	
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(SQL_CREATE_TABLE);
-		//database.execSQL(SQL_INIT_TABLE);
+		//database.execSQL(SQL_INSERT_ROOT);
+		//database.execSQL(SQL_INSERT_INT);
+		//database.execSQL(SQL_INSERT_FLOAT);
+		//database.execSQL(SQL_INSERT_STRING);
 	}
 	
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion,

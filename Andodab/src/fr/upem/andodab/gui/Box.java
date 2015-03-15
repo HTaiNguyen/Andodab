@@ -12,6 +12,7 @@ import android.view.View;
 public class Box extends View {
 	private Paint paint;
 
+	private final static int PADDING = 4;
 	
 	private DBCommon dbCommon;
 	private List<DBDictionary> dbDictionaries;
@@ -31,17 +32,26 @@ public class Box extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		//canvas.drawRect(50, 50, 10, 10, paint);
 		paint.setTextSize(16);
 		
-		canvas.drawText(dbCommon.getName(), 10, 0, paint);
-		int x = 10;
-		int y = 20;
+		canvas.drawText(dbCommon.getName(), y, x, paint);
+		int y = 24;
+		float height=8;
+		float width = paint.measureText(dbCommon.getName());
+
 		for(DBDictionary dbDictionary : dbDictionaries) {
-			
-			canvas.drawText(dbDictionary.toString(), x, y, paint);
+			float textWidth = paint.measureText(dbDictionary.toString());
+			if(textWidth > width) {
+				width = textWidth;
+			}
+			canvas.drawText(dbDictionary.toString(), this.x, this.y+y, paint);
 			y += 20;
+			height += 16;
+			
 		}
+		paint.setStyle(Paint.Style.STROKE);
+		canvas.drawRect(this.x-PADDING, this.y-PADDING-8, this.x+width+PADDING, this.y+8, paint);
+		canvas.drawRect(this.x-PADDING, this.y-PADDING-8, this.x+width+PADDING, this.y+height+PADDING, paint);
 		
 	}
 }

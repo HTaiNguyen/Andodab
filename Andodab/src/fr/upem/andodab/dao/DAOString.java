@@ -39,7 +39,9 @@ public class DAOString implements DAO<DBString> {
 				TableString.COL_ID + " = ?", new String[]{id.toString()}, 
 				null); 
 		
-		cursor.moveToFirst();
+		if(!cursor.moveToFirst()) {
+			return null;
+		}
 		
 		String value = cursor.getString(cursor.getColumnIndex(TableString.COL_VALUE));
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableString.COL_ANCESTOR_ID));

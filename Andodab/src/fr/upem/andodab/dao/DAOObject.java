@@ -32,7 +32,11 @@ public class DAOObject implements DAO<DBObject> {
 				TableObject.CONTENT_URI, new String[] { TableObject.COL_TYPE },
 				TableObject.COL_ID + " = ?", new String[] { id.toString() },
 				null);
-		cursor.moveToFirst();
+		
+		if(!cursor.moveToFirst()) {
+			return null;
+		}
+		
 		String type = cursor.getString(cursor.getColumnIndex(TableObject.COL_TYPE ));
 
 		switch(type) {

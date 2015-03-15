@@ -42,7 +42,9 @@ public class DAODictionary implements DAO<DBDictionary>{
 				TableDictionary.COL_ID + " = ?", new String[] { id.toString() }, 
 				null);
 		
-		cursor.moveToFirst();
+		if(!cursor.moveToFirst()) {
+			return null;
+		}
 		
 		long ownerId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_OBJECT_ID));
 		String key = cursor.getString(cursor.getColumnIndex(TableDictionary.COL_KEY));
@@ -74,9 +76,10 @@ public class DAODictionary implements DAO<DBDictionary>{
 				DBObject obj = daoObject.read(valueId);
 
 				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj);
-
-				dbDictionary.setId(id);
-				dbDictionaries.add(dbDictionary);
+				if(dbDictionaries != null) {
+					dbDictionary.setId(id);
+					dbDictionaries.add(dbDictionary);
+				}
 			} while (cursor.moveToNext());
 		}
 

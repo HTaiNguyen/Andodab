@@ -38,7 +38,9 @@ public class DAOInteger implements DAO<DBInteger>{
 				TableInteger.COL_ID + " = ?", new String[]{id.toString()}, 
 				null);
 		
-		cursor.moveToFirst();
+		if(!cursor.moveToFirst()) {
+			return null;
+		}
 		
 		long value = cursor.getLong(cursor.getColumnIndex(TableInteger.COL_VALUE));
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableInteger.COL_ANCESTOR_ID));

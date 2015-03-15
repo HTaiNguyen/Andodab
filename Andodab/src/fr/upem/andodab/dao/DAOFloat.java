@@ -38,7 +38,10 @@ public class DAOFloat implements DAO<DBFloat>{
 				TableFloat.COL_ID + " = ?", new String[]{id.toString()}, 
 				null);
 		
-		cursor.moveToFirst();
+		if(!cursor.moveToFirst()) {
+			return null;
+		}
+		
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableFloat.COL_ANCESTOR_ID));
 		Float value = cursor.getFloat(cursor.getColumnIndex(TableFloat.COL_VALUE));
 		

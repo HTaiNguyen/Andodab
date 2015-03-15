@@ -22,10 +22,7 @@ public class TableDictionary {
 					COL_KEY + " VARCHAR(255), " + 
 					COL_VALUE_ID + " INTEGER" +
 					");";
-	
 
-	//"FOREIGN KEY (" + OBJECT_ID + ") REFERENCES " + TABLE_NAME + "(" + ID + "), " +
-	//"FOREIGN KEY (" + VALUE_ID + ") REFERENCES " + TABLE_NAME + "(" + ID + ")" +
 	public static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TableDictionary.TABLE_NAME;
 
