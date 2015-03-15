@@ -23,6 +23,7 @@
     <string name="message_key_list">Aucun attribut</string>
     <string name="button_edit_key_title">Redéfinir la valeur</string>
     <string name="button_edit_key_name">Valeur :</string>
+    <string name="title_activity_diagram">Andodab</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
 
