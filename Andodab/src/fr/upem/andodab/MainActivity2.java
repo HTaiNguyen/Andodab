@@ -71,7 +71,7 @@ public class MainActivity2 extends Activity {
 			this.sort(new Comparator<DBCommon>() {
 				@Override
 				public int compare(DBCommon c1, DBCommon c2) {
-					return c1.getName().compareTo(c2.getName());
+					return c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase());
 				}
 			});
 
@@ -93,7 +93,7 @@ public class MainActivity2 extends Activity {
 			this.sort(new Comparator<DBDictionary>() {
 				@Override
 				public int compare(DBDictionary c1, DBDictionary c2) {
-					return c1.getKey().compareTo(c2.getKey());
+					return c1.getKey().toLowerCase().compareTo(c2.getKey().toLowerCase());
 				}
 			});
 
@@ -115,7 +115,7 @@ public class MainActivity2 extends Activity {
 
 		daoCommon = new DAOCommon(getContentResolver());
 		daoDictionary = new DAODictionary(getContentResolver());
-		
+
 		daoFloat = new DAOFloat(getContentResolver());
 		daoInteger = new DAOInteger(getContentResolver());
 		daoString = new DAOString(getContentResolver());
@@ -204,32 +204,38 @@ public class MainActivity2 extends Activity {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String name = inputName.getText().toString();
 						String type = spinnerType.getSelectedItem().toString();
+						Object objectSelected = spinnerObjects.getSelectedItem();
 						String value = inputValue.getText().toString();
 
-						if (name.isEmpty()) {
+						if (name.isEmpty() || (!type.equals("Objet") && value.isEmpty())) {
 							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
 							toast.show();
 
 							return;
 						}
 
-						DBObject primitive;
+						DBDictionary dictionary = null;
+						DBObject object = null;
 
-						if (type.equals("Float")) {
-							DBFloat dbFloat = new DBFloat(currentId, Float.parseFloat(value));
-							daoFloat.create(dbFloat);
-							primitive = dbFloat;
-						} else if (type.equals("Integer")) {
-							DBInteger dbInteger = new DBInteger(currentId, Long.parseLong(value));
-							daoInteger.create(dbInteger);
-							primitive = dbInteger;
+						if (type.equals("Objet")) {
+							object = (DBObject) objectSelected;
 						} else {
-							DBString dbString = new DBString(currentId, value);
-							daoString.create(dbString);
-							primitive = dbString;
+							if (type.equals("Float")) {
+								DBFloat dbFloat = new DBFloat(currentId, Float.parseFloat(value));
+								daoFloat.create(dbFloat);
+								object = dbFloat;
+							} else if (type.equals("Integer")) {
+								DBInteger dbInteger = new DBInteger(currentId, Long.parseLong(value));
+								daoInteger.create(dbInteger);
+								object = dbInteger;
+							} else {
+								DBString dbString = new DBString(currentId, value);
+								daoString.create(dbString);
+								object = dbString;
+							}
 						}
 
-						DBDictionary dictionary = new DBDictionary(currentId, name, primitive.getId(), primitive.toString());
+						dictionary = new DBDictionary(currentId, name, object.getId(), object.toString());
 
 						try {
 							daoDictionary.create(dictionary);

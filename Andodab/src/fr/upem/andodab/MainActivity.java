@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 			this.sort(new Comparator<DBCommon>() {
 				@Override
 				public int compare(DBCommon c1, DBCommon c2) {
-					return c1.getName().compareTo(c2.getName());
+					return c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase());
 				}
 			});
 
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-//		deleteDatabase(DBManager.DB_NAME);
+		//deleteDatabase(DBManager.DB_NAME);
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
