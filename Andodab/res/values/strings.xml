@@ -36,5 +36,25 @@
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    
+    
+    <string name="title_activity_wifi">WiFiDirectActivity</string>
+    <string name="connect_peer_button">Connecter</string>
+    <string name="disconnect_peer_button">Déconnecter</string>
+    <string name="get_file_button">Récupérer fichier</string>
+    <string name="label_me">Moi</string>
+    <string name="label_peers">Pairs</string>
+    <string name="empty_message">Message vide</string>
+    <string name="enable_p2p_button">Activer Wifi Direct</string>
+    <string name="discover_peers_button">Rechercher pairs</string>
+    <string name="p2p_off_warning">Wifi direct est désactivé</string>
+    <string name="group_owner_text">"Am I the Group Owner? "</string>
+    <string name="client_text">This device will act as a client. Click on Gallery button to pick a local(stored) file</string>
+    <string name="empty"></string>
+    
+    
+    
+    
+    
 </resources>
 
