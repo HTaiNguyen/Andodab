@@ -8,6 +8,12 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -16,26 +22,42 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+        </activity>
+
+        <provider
+            android:name=".db.DBManager"
+            android:authorities="fr.upem.test.DbManager"
+            android:exported="false"
+            android:syncable="true" />
+
+        <activity
+            android:name=".MainActivity2"
+            android:label="@string/title_activity_main_activity2" >
+        </activity>
+        <activity
+            android:name="test.NotificationActivity"
+            android:label="@string/title_activity_notification" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider
-            android:name=".db.DBManager"
-            android:authorities="fr.upem.test.DbManager"
-            android:exported="false"
-            android:syncable="true" />
+
+        <service android:name=".NotificationService" >
+        </service>
+
+        <receiver android:name=".BroadcastManager" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
+                </action>
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:name=".MainActivity2"
-            android:label="@string/title_activity_main_activity2" >
+            android:name="test.NotificationView"
+            android:label="@string/title_activity_notification_view" >
         </activity>
-        <activity
-            android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification" >
-        </activity>
-        <service android:name="fr.upem.andodab.NotificationService"></service>
     </application>
 
 </manifest>

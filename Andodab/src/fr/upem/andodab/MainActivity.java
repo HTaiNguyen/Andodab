@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//deleteDatabase(DBManager.DB_NAME);
+//		deleteDatabase(DBManager.DB_NAME);
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
