@@ -424,7 +424,8 @@ public class MainActivity2 extends Activity {
 			final DBDictionary dictionary0 = adapter2.getItem(info.position);
 
 			if (dictionary0.getValue().getType().equals("COMMON")) {
-				System.out.println("dsflgkndskgjnsdgnsdlgn");
+				Intent intent = new Intent(getBaseContext(), Diagram.class);
+				startActivity(intent);
 			} else {
 				AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
 				alert.setTitle(R.string.button_edit_key_title);
@@ -444,7 +445,7 @@ public class MainActivity2 extends Activity {
 				alert.setPositiveButton(R.string.button_edit_object_ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String value = inputValue.getText().toString();
-						
+
 						if (value.isEmpty()) {
 							Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
 							toast.show();
@@ -453,13 +454,13 @@ public class MainActivity2 extends Activity {
 						}
 
 						DBObject o = dictionary0.getValue();
-						
+
 						if (o.getType().equals("FLOAT")) {
 							DBFloat dbFloat = (DBFloat) o;
 							dbFloat.setValue(Float.parseFloat(value));
 							daoFloat.udpate(dbFloat);
 							o = dbFloat;
-						} else if (o.getType().equals("INTEGER")) {
+						} else if (o.getType().equals("INT")) {
 							DBInteger dbInteger = (DBInteger) o;
 							dbInteger.setValue(Long.parseLong(value));
 							daoInteger.udpate(dbInteger);
@@ -471,8 +472,6 @@ public class MainActivity2 extends Activity {
 							o = dbString;
 						}
 
-						//adapter2.getItem(info.position).setName(name);
-						
 						adapter2.notifyDataSetChanged();
 					}
 				});
