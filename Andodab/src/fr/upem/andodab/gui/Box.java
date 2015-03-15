@@ -1,4 +1,4 @@
-package fr.upem.andolab.gui;
+package fr.upem.andodab.gui;
 
 import java.util.List;
 

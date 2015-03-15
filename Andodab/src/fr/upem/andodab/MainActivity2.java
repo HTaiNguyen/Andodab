@@ -15,7 +15,7 @@ import fr.upem.andodab.db.DBInteger;
 import fr.upem.andodab.db.DBManager;
 import fr.upem.andodab.db.DBObject;
 import fr.upem.andodab.db.DBString;
-import fr.upem.andolab.gui.Diagram;
+import fr.upem.andodab.gui.Diagram;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
