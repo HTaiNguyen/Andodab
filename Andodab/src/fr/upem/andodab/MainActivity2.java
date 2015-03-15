@@ -454,23 +454,25 @@ public class MainActivity2 extends Activity {
 
 						DBObject o = dictionary0.getValue();
 						
-						if (o.getType().equals("Float")) {
+						if (o.getType().equals("FLOAT")) {
 							DBFloat dbFloat = (DBFloat) o;
 							dbFloat.setValue(Float.parseFloat(value));
 							daoFloat.udpate(dbFloat);
 							o = dbFloat;
-						} else if (o.getType().equals("Integer")) {
+						} else if (o.getType().equals("INTEGER")) {
 							DBInteger dbInteger = (DBInteger) o;
 							dbInteger.setValue(Long.parseLong(value));
-							daoInteger.create(dbInteger);
+							daoInteger.udpate(dbInteger);
 							o = dbInteger;
 						} else {
 							DBString dbString = (DBString) o;
 							dbString.setValue(value);
-							daoString.create(dbString);
+							daoString.udpate(dbString);
 							o = dbString;
 						}
 
+						//adapter2.getItem(info.position).setName(name);
+						
 						adapter2.notifyDataSetChanged();
 					}
 				});

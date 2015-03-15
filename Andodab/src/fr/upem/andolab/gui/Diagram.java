@@ -15,7 +15,5 @@ public class Diagram extends Activity {
 
 		boxes = new ArrayList<>();
 		
-		Box box = new Box(this, 50, 50, 100, 100, Color.GREEN);
-		setContentView(box);
 	}
 }
