@@ -21,7 +21,11 @@
     <string name="error_message">An error has occurred</string>
     <string name="message_object_list">No object</string>
     <string name="message_key_list">No attribute</string>
-
+    <string name="button_edit_key_title">Redefine value</string>
+    <string name="button_edit_key_name">Value :</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
     <string name="title_activity_notification">NotificationActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_notification_view">NotificationView</string>
@@ -33,10 +37,6 @@
     <string name="BroadcastReceiver">Broadcast Receiver</string>
     <string name="wifioff">WIFI OFF</string>
     <string name="wifion">WIFI ON</string>
-
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    
     
     <string name="title_activity_wifi">WiFiDirectActivity</string>
     <string name="connect_peer_button">Connecter</string>
@@ -51,10 +51,5 @@
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="client_text">This device will act as a client. Click on Gallery button to pick a local(stored) file</string>
     <string name="empty"></string>
-    
-    
-    
-    
-    
 </resources>
 
