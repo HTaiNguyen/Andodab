@@ -21,8 +21,8 @@ public class DAOInteger implements DAO<DBInteger>{
 	@Override
 	public void create(DBInteger dbInteger) {
 		ContentValues values = new ContentValues();
-		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		values.put(TableInteger.COL_TYPE, dbInteger.getType());
+		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		dbInteger.setId(ContentUris.parseId(uri));
 		values.clear();
 		values.put(TableInteger.COL_ID, dbInteger.getId());

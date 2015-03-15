@@ -21,8 +21,8 @@ public class DAOString implements DAO<DBString> {
 	@Override
 	public void create(DBString dbString) {
 		ContentValues values = new ContentValues();
-		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		values.put(TableString.COL_TYPE, dbString.getType());
+		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		dbString.setId(ContentUris.parseId(uri));
 		values.clear();
 		values.put(TableString.COL_ID, dbString.getId());

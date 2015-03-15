@@ -23,8 +23,8 @@ public class DAOCommon implements DAO<DBCommon>{
 	@Override
 	public void create(DBCommon dbCommon) {
 		ContentValues values = new ContentValues();
-		Uri uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		values.put(TableCommon.COL_TYPE, dbCommon.getType());
+		Uri uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		dbCommon.setId(ContentUris.parseId(uri));
 		values.clear();
 		values.put(TableCommon.COL_ID, dbCommon.getId());
