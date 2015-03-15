@@ -5,9 +5,9 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBInteger;
-import fr.upem.andodab.db.DBObject;
+import fr.upem.andodab.table.TableInteger;
+import fr.upem.andodab.table.TableObject;
 
 public class DAOInteger implements DAO<DBInteger>{
 	
@@ -20,25 +20,28 @@ public class DAOInteger implements DAO<DBInteger>{
 	@Override
 	public void create(DBInteger dbInteger) {
 		ContentValues values = new ContentValues();
-		values.put(DBInteger.ANCESTOR_ID, dbInteger.getAncestorId());
-		Uri  uri = contentResolver.insert(DBObject.CONTENT_URI, values);	
+		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		
 		dbInteger.setId(ContentUris.parseId(uri));
-		values.clear();		
-		values.put(DBInteger.ID, dbInteger.getId());
-		values.put(DBInteger.VALUE, dbInteger.getValue());
-		
-		contentResolver.insert(DBCommon.CONTENT_URI, values);	
+
+		values.put(TableInteger.COL_ID, dbInteger.getId());
+		values.put(TableInteger.COL_VALUE, dbInteger.getValue());
+		values.put(TableInteger.COL_ANCESTOR_ID, dbInteger.getAncestorId());
+		contentResolver.insert(TableInteger.CONTENT_URI, values);	
 	}
 
 	@Override
 	public DBInteger read(Object id) {
-		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBInteger.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+
+		Cursor cursor = contentResolver.query(
+				TableInteger.CONTENT_URI, new String[]{TableInteger.COL_VALUE, TableInteger.COL_ANCESTOR_ID},
+				TableInteger.COL_ID + " = ?", new String[]{id.toString()}, 
+				null);
+		
 		cursor.moveToFirst();
-		long ancestorId = cursor.getLong(cursor.getColumnIndex(DBInteger.ANCESTOR_ID));
-		cursor = contentResolver.query(DBInteger.CONTENT_URI, new String[]{DBInteger.VALUE}, DBInteger.ID + " = ?", new String[]{id.toString()}, null);
-		cursor.moveToFirst();
-		long value = cursor.getLong(cursor.getColumnIndex(DBInteger.VALUE));
+		
+		long value = cursor.getLong(cursor.getColumnIndex(TableInteger.COL_VALUE));
+		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableInteger.COL_ANCESTOR_ID));
 		
 		DBInteger dbInteger = new DBInteger(ancestorId, value);
 		dbInteger.setId((Long)id);
@@ -48,18 +51,19 @@ public class DAOInteger implements DAO<DBInteger>{
 	@Override
 	public void udpate(DBInteger dbInteger) {
 		ContentValues values = new ContentValues();
-		values.put(DBInteger.ID, dbInteger.getId());
-		values.put(DBInteger.ANCESTOR_ID, dbInteger.getAncestorId());
-		values.put(DBInteger.VALUE, dbInteger.getValue());
-		contentResolver.update(DBInteger.CONTENT_URI, values, null, null);
+		values.put(TableInteger.COL_ID, dbInteger.getId());
+		values.put(TableInteger.COL_ANCESTOR_ID, dbInteger.getAncestorId());
+		values.put(TableInteger.COL_VALUE, dbInteger.getValue());
+
+		contentResolver.update(TableInteger.CONTENT_URI, values, TableInteger.COL_ID + " = ?", new String[] { dbInteger.getId().toString() });
 	}
 
 	@Override
 	public void delete(DBInteger dbInteger) {
 		ContentValues values = new ContentValues();
-		values.put(DBCommon.ID, dbInteger.getId());
+		values.put(TableInteger.COL_ID, dbInteger.getId());
 		
-		contentResolver.delete(DBInteger.CONTENT_URI, DBInteger.ID + " = ?", new String[]{dbInteger.getId()+""});
+		contentResolver.delete(TableInteger.CONTENT_URI, TableInteger.COL_ID + " = ?", new String[]{dbInteger.getId()+""});
 	}
 
 }

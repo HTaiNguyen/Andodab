@@ -5,9 +5,9 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBString;
-import fr.upem.andodab.db.DBObject;
+import fr.upem.andodab.table.TableObject;
+import fr.upem.andodab.table.TableString;
 
 public class DAOString implements DAO<DBString> {
 	
@@ -20,25 +20,31 @@ public class DAOString implements DAO<DBString> {
 	@Override
 	public void create(DBString dbString) {
 		ContentValues values = new ContentValues();
-		values.put(DBString.ANCESTOR_ID, dbString.getAncestorId());
-		Uri  uri = contentResolver.insert(DBObject.CONTENT_URI, values);	
+
+		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		
 		dbString.setId(ContentUris.parseId(uri));
-		values.clear();		
-		values.put(DBString.ID, dbString.getId());
-		values.put(DBString.VALUE, dbString.getValue());
+
+		values.put(TableString.COL_ID, dbString.getId());
+		values.put(TableString.COL_VALUE, dbString.getValue());
+		values.put(TableString.COL_ANCESTOR_ID, dbString.getAncestorId());
+
 		
-		contentResolver.insert(DBCommon.CONTENT_URI, values);	
+		contentResolver.insert(TableString.CONTENT_URI, values);	
 	}
 
 	@Override
 	public DBString read(Object id) {
-		Cursor cursor = contentResolver.query(DBObject.CONTENT_URI, new String[]{DBString.ANCESTOR_ID}, DBCommon.ID + " = ?", new String[]{id.toString()}, null);
+		
+		Cursor cursor = contentResolver.query(
+				TableString.CONTENT_URI, new String[]{TableString.COL_VALUE, TableString.COL_ANCESTOR_ID}, 
+				TableString.COL_ID + " = ?", new String[]{id.toString()}, 
+				null); 
+		
 		cursor.moveToFirst();
-		long ancestorId = cursor.getLong(cursor.getColumnIndex(DBString.ANCESTOR_ID));
-		cursor = contentResolver.query(DBString.CONTENT_URI, new String[]{DBString.VALUE}, DBString.ID + " = ?", new String[]{id.toString()}, null);
-		cursor.moveToFirst();
-		String value = cursor.getString(cursor.getColumnIndex(DBString.VALUE));
+		
+		String value = cursor.getString(cursor.getColumnIndex(TableString.COL_VALUE));
+		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableString.COL_ANCESTOR_ID));
 		
 		DBString dbString = new DBString(ancestorId, value);
 		dbString.setId((Long)id);
@@ -48,18 +54,19 @@ public class DAOString implements DAO<DBString> {
 	@Override
 	public void udpate(DBString dbString) {
 		ContentValues values = new ContentValues();
-		values.put(DBString.ID, dbString.getId());
-		values.put(DBString.ANCESTOR_ID, dbString.getAncestorId());
-		values.put(DBString.VALUE, dbString.getValue());
-		contentResolver.update(DBString.CONTENT_URI, values, null, null);
+		values.put(TableString.COL_ID, dbString.getId());
+		values.put(TableString.COL_ANCESTOR_ID, dbString.getAncestorId());
+		values.put(TableString.COL_VALUE, dbString.getValue());
+		
+		contentResolver.update(TableString.CONTENT_URI, values, TableString.COL_ID + " = ?", new String[] { dbString.getId().toString() });
 	}
 
 	@Override
 	public void delete(DBString dbString) {
 		ContentValues values = new ContentValues();
-		values.put(DBCommon.ID, dbString.getId());
+		values.put(TableString.COL_ID, dbString.getId());
 		
-		contentResolver.delete(DBString.CONTENT_URI, DBString.ID + " = ?", new String[]{dbString.getId()+""});
+		contentResolver.delete(TableString.CONTENT_URI, TableString.COL_ID + " = ?", new String[]{dbString.getId()+""});
 		
 	}
 

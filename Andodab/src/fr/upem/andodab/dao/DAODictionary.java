@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBDictionary;
+import fr.upem.andodab.table.TableDictionary;
 
 public class DAODictionary implements DAO<DBDictionary>{
 
@@ -22,59 +23,47 @@ public class DAODictionary implements DAO<DBDictionary>{
 	public void create(DBDictionary dbDictionary) {
 		ContentValues values = new ContentValues();
 
-		values.put(DBDictionary.OBJECT_ID, dbDictionary.getOwnerId());
-		values.put(DBDictionary.VALUE_ID, dbDictionary.getValueId());
-		values.put(DBDictionary.KEY, dbDictionary.getKey());
+		values.put(TableDictionary.COL_OBJECT_ID, dbDictionary.getOwnerId());
+		values.put(TableDictionary.COL_VALUE_ID, dbDictionary.getValueId());
+		values.put(TableDictionary.COL_KEY, dbDictionary.getKey());
 
-		Uri uri = contentResolver.insert(DBDictionary.CONTENT_URI, values);	
+		Uri uri = contentResolver.insert(TableDictionary.CONTENT_URI, values);	
 
 		dbDictionary.setId(ContentUris.parseId(uri));
 	}
 
 	@Override
 	public DBDictionary read(Object id) {
-		Cursor cursor = contentResolver.query(DBDictionary.CONTENT_URI, new String[] { DBDictionary.OBJECT_ID, DBDictionary.KEY, DBDictionary.VALUE_ID }, DBDictionary.ID + " = ?", new String[] { id.toString() }, null);
+		Cursor cursor = contentResolver.query(
+				TableDictionary.CONTENT_URI, new String[] { TableDictionary.COL_OBJECT_ID, TableDictionary.COL_KEY, TableDictionary.COL_VALUE_ID }, 
+				TableDictionary.COL_ID + " = ?", new String[] { id.toString() }, 
+				null);
+		
 		cursor.moveToFirst();
-		long ownerId = cursor.getLong(cursor.getColumnIndex(DBDictionary.OBJECT_ID));
-		String key = cursor.getString(cursor.getColumnIndex(DBDictionary.KEY));
-		long valueId = cursor.getLong(cursor.getColumnIndex(DBDictionary.VALUE_ID));
+		
+		long ownerId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_OBJECT_ID));
+		String key = cursor.getString(cursor.getColumnIndex(TableDictionary.COL_KEY));
+		long valueId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_VALUE_ID));
 
 		DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId);
 		dbDictionary.setId((Long) id);
 
 		return dbDictionary;
 	}
-
-	@Override
-	public void udpate(DBDictionary dbDictionary) {
-		ContentValues values = new ContentValues();
-
-		values.put(DBDictionary.ID, dbDictionary.getId());
-		values.put(DBDictionary.OBJECT_ID, dbDictionary.getOwnerId());
-		values.put(DBDictionary.KEY, dbDictionary.getKey());
-		values.put(DBDictionary.VALUE_ID, dbDictionary.getValueId());
-
-		contentResolver.update(DBDictionary.CONTENT_URI, values, null, null);
-	}
-
-	@Override
-	public void delete(DBDictionary dbDictionary) {
-		ContentValues values = new ContentValues();
-
-		values.put(DBDictionary.ID, dbDictionary.getId());
-
-		contentResolver.delete(DBDictionary.CONTENT_URI, DBDictionary.ID + " = ?", new String[] { dbDictionary.getId() + "" });
-	}
+	
 
 	public List<DBDictionary> findByObject(Long ownerId) {
-		Cursor cursor = contentResolver.query(DBDictionary.CONTENT_URI, new String[]{DBDictionary.ID, DBDictionary.KEY, DBDictionary.VALUE_ID}, DBDictionary.OBJECT_ID + " = ?", new String[] { ownerId.toString() }, null);
+		Cursor cursor = contentResolver.query(TableDictionary.CONTENT_URI, new String[]{TableDictionary.COL_ID, TableDictionary.COL_KEY, TableDictionary.COL_VALUE_ID}, 
+				TableDictionary.COL_OBJECT_ID + " = ?", new String[] { ownerId.toString() },
+				null);
+		
 		ArrayList<DBDictionary> dbDictionaries = new ArrayList<DBDictionary>();
 
 		if (cursor.moveToFirst()) {
 			do {
-				long id = cursor.getLong(cursor.getColumnIndex(DBDictionary.ID));
-				String key = cursor.getString(cursor.getColumnIndex(DBDictionary.KEY));
-				long valueId = cursor.getLong(cursor.getColumnIndex(DBDictionary.VALUE_ID));
+				long id = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_ID));
+				String key = cursor.getString(cursor.getColumnIndex(TableDictionary.COL_KEY));
+				long valueId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_VALUE_ID));
 
 				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId);
 
@@ -85,4 +74,26 @@ public class DAODictionary implements DAO<DBDictionary>{
 
 		return dbDictionaries;
 	}
+
+	@Override
+	public void udpate(DBDictionary dbDictionary) {
+		ContentValues values = new ContentValues();
+
+		values.put(TableDictionary.COL_ID, dbDictionary.getId());
+		values.put(TableDictionary.COL_OBJECT_ID, dbDictionary.getOwnerId());
+		values.put(TableDictionary.COL_KEY, dbDictionary.getKey());
+		values.put(TableDictionary.COL_VALUE_ID, dbDictionary.getValueId());
+
+		contentResolver.update(TableDictionary.CONTENT_URI, values, null, null);
+	}
+
+	@Override
+	public void delete(DBDictionary dbDictionary) {
+		ContentValues values = new ContentValues();
+
+		values.put(TableDictionary.COL_ID, dbDictionary.getId());
+
+		contentResolver.delete(TableDictionary.CONTENT_URI, TableDictionary.COL_ID + " = ?", new String[] { dbDictionary.getId() + "" });
+	}
+
 }
