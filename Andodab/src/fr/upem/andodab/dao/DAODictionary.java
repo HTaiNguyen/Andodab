@@ -50,7 +50,7 @@ public class DAODictionary implements DAO<DBDictionary>{
 		
 		DBObject obj = daoObject.read(valueId);
 
-		DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj.toString());
+		DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj);
 		dbDictionary.setId((Long) id);
 
 		return dbDictionary;
@@ -73,7 +73,7 @@ public class DAODictionary implements DAO<DBDictionary>{
 
 				DBObject obj = daoObject.read(valueId);
 
-				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj.toString());
+				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj);
 
 				dbDictionary.setId(id);
 				dbDictionaries.add(dbDictionary);

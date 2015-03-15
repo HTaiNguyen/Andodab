@@ -14,10 +14,10 @@ public class TableInteger extends TableObject{
 	public static final String COL_VALUE = "value";
 	
 	public static final String SQL_CREATE_TABLE = 
-			"CREATE TABLE IF NOT EXISTS " + TableInteger.TABLE_NAME + " (" + 
-					TableInteger.COL_ID + " INTEGER, " + 
-					TableInteger.COL_ANCESTOR_ID + " INTEGER, " +
-					TableInteger.COL_VALUE + " INTEGER, " +
+			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
+					COL_ID + " INTEGER, " + 
+					COL_ANCESTOR_ID + " INTEGER, " +
+					COL_VALUE + " INTEGER, " +
 					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE = 

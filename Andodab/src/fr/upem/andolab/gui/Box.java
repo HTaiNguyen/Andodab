@@ -1,5 +1,9 @@
 package fr.upem.andolab.gui;
 
+import java.util.List;
+
+import fr.upem.andodab.db.DBCommon;
+import fr.upem.andodab.db.DBDictionary;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +15,9 @@ public class Box extends View {
 	private int y;
 	private int height;
 	private int width;
+	
+	private DBCommon dbCommon;
+	private List<DBDictionary> dbDictionaries;
 
 	public Box(Context context, int x, int y, int height, int width, int color) {
 		super(context);
@@ -26,5 +33,10 @@ public class Box extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		canvas.drawRect(50, 50, 10, 10, paint);
+		canvas.drawText(dbCommon.getName(), x, y, paint);
+		for(DBDictionary dbDictionary : dbDictionaries) {
+			canvas.drawText(dbDictionary.toString(), x, y, paint);
+		}
+		
 	}
 }
