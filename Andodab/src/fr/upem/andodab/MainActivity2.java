@@ -459,7 +459,7 @@ public class MainActivity2 extends Activity {
 							dbFloat.setValue(Float.parseFloat(value));
 							daoFloat.udpate(dbFloat);
 							o = dbFloat;
-						} else if (o.getType().equals("INTEGER")) {
+						} else if (o.getType().equals("INT")) {
 							DBInteger dbInteger = (DBInteger) o;
 							dbInteger.setValue(Long.parseLong(value));
 							daoInteger.udpate(dbInteger);
@@ -470,8 +470,6 @@ public class MainActivity2 extends Activity {
 							daoString.udpate(dbString);
 							o = dbString;
 						}
-
-						//adapter2.getItem(info.position).setName(name);
 						
 						adapter2.notifyDataSetChanged();
 					}
