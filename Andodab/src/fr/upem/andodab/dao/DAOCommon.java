@@ -25,9 +25,6 @@ public class DAOCommon implements DAO<DBCommon>{
 		Uri uri = contentResolver.insert(TableCommon.CONTENT_URI, values);	
 		
 		dbCommon.setId(ContentUris.parseId(uri));
-		
-		values.clear();
-
 
 		values.put(TableCommon.COL_ID, dbCommon.getId());
 		values.put(TableCommon.COL_ANCESTOR_ID, dbCommon.getAncestorId());

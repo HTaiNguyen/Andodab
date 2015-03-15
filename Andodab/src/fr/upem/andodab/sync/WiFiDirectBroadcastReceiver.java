@@ -21,7 +21,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WiFiDirectActivity activity;
 
     /**
-     * @param manager WifiP2pManager system service
+     * @param manager WifiP2pManager system service 
      * @param channel Wifi p2p channel
      * @param activity activity associated with the receiver
      */
