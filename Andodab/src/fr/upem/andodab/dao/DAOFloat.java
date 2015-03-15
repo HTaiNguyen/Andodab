@@ -20,7 +20,7 @@ public class DAOFloat implements DAO<DBFloat>{
 	@Override
 	public void create(DBFloat dbFloat) {
 		ContentValues values = new ContentValues();
-		values.put(TableFloat.COL_TYPE, dbFloat.getType());
+		values.put(TableObject.COL_TYPE, dbFloat.getType());
 		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		dbFloat.setId(ContentUris.parseId(uri));
 		values.clear();

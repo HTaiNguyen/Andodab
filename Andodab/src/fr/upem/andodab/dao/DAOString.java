@@ -20,7 +20,7 @@ public class DAOString implements DAO<DBString> {
 	@Override
 	public void create(DBString dbString) {
 		ContentValues values = new ContentValues();
-		values.put(TableString.COL_TYPE, dbString.getType());
+		values.put(TableObject.COL_TYPE, dbString.getType());
 		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		dbString.setId(ContentUris.parseId(uri));
 		values.clear();
@@ -28,7 +28,6 @@ public class DAOString implements DAO<DBString> {
 		values.put(TableString.COL_VALUE, dbString.getValue());
 		values.put(TableString.COL_ANCESTOR_ID, dbString.getAncestorId());
 
-		
 		contentResolver.insert(TableString.CONTENT_URI, values);	
 	}
 
