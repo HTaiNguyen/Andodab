@@ -58,7 +58,8 @@ public class DAODictionary implements DAO<DBDictionary>{
 	
 
 	public List<DBDictionary> findByObject(Long ownerId) {
-		Cursor cursor = contentResolver.query(TableDictionary.CONTENT_URI, new String[]{TableDictionary.COL_ID, TableDictionary.COL_KEY, TableDictionary.COL_VALUE_ID}, 
+		Cursor cursor = contentResolver.query(
+				TableDictionary.CONTENT_URI, new String[]{TableDictionary.COL_ID, TableDictionary.COL_KEY, TableDictionary.COL_VALUE_ID}, 
 				TableDictionary.COL_OBJECT_ID + " = ?", new String[] { ownerId.toString() },
 				null);
 		

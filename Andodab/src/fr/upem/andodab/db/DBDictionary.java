@@ -53,6 +53,6 @@ public class DBDictionary {
 	
 	@Override
 	public String toString() {
-		return key + " = valueName";
+		return key + " = "+ valueName;
 	}
 }

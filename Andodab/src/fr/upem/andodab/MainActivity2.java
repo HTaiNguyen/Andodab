@@ -5,6 +5,9 @@ import java.util.List;
 
 import fr.upem.andodab.dao.DAOCommon;
 import fr.upem.andodab.dao.DAODictionary;
+import fr.upem.andodab.dao.DAOFloat;
+import fr.upem.andodab.dao.DAOInteger;
+import fr.upem.andodab.dao.DAOString;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBDictionary;
 import fr.upem.andodab.db.DBFloat;
@@ -43,6 +46,9 @@ public class MainActivity2 extends Activity {
 	private DBManager dbManager;
 	private DAOCommon daoCommon;
 	private DAODictionary daoDictionary;
+	private DAOFloat daoFloat;
+	private DAOInteger daoInteger;
+	private DAOString daoString;
 	private TextView title;
 	private Button addButtonKey;
 	private Button addButtonObject;
@@ -109,6 +115,10 @@ public class MainActivity2 extends Activity {
 
 		daoCommon = new DAOCommon(getContentResolver());
 		daoDictionary = new DAODictionary(getContentResolver());
+		
+		daoFloat = new DAOFloat(getContentResolver());
+		daoInteger = new DAOInteger(getContentResolver());
+		daoString = new DAOString(getContentResolver());
 
 		title = (TextView) findViewById(R.id.titleObjectList);
 		title.setText(currentName);
@@ -206,11 +216,17 @@ public class MainActivity2 extends Activity {
 						DBObject primitive;
 
 						if (type.equals("Float")) {
-							primitive = new DBFloat(currentId, Float.parseFloat(value));
+							DBFloat dbFloat = new DBFloat(currentId, Float.parseFloat(value));
+							daoFloat.create(dbFloat);
+							primitive = dbFloat;
 						} else if (type.equals("Integer")) {
-							primitive = new DBInteger(currentId, Long.parseLong(value));
+							DBInteger dbInteger = new DBInteger(currentId, Long.parseLong(value));
+							daoInteger.create(dbInteger);
+							primitive = dbInteger;
 						} else {
-							primitive = new DBString(currentId, value);
+							DBString dbString = new DBString(currentId, value);
+							daoString.create(dbString);
+							primitive = dbString;
 						}
 
 						DBDictionary dictionary = new DBDictionary(currentId, name, primitive.getId(), primitive.toString());
