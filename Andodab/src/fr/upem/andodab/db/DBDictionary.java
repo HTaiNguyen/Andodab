@@ -6,14 +6,17 @@ public class DBDictionary {
 	private Long ownerId;
 	private String key;
 	private Long valueId;
+	
+	private String valueName;
 
 	public DBDictionary() {
 	}
 
-	public DBDictionary(Long ownerId, String key, Long valueId) {
+	public DBDictionary(Long ownerId, String key, Long valueId, String valueName) {
 		this.ownerId  = ownerId;
 		this.key = key;
 		this.valueId = valueId;
+		this.valueName = valueName;
 	}
 
 	public Long getId() {
@@ -50,6 +53,6 @@ public class DBDictionary {
 	
 	@Override
 	public String toString() {
-		return key + " = ?";
+		return key + " = valueName";
 	}
 }

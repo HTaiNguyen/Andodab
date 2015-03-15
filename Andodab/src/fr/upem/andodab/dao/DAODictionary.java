@@ -9,14 +9,17 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBDictionary;
+import fr.upem.andodab.db.DBObject;
 import fr.upem.andodab.table.TableDictionary;
 
 public class DAODictionary implements DAO<DBDictionary>{
 
 	private ContentResolver contentResolver;
+	private DAOObject daoObject;
 
 	public DAODictionary(ContentResolver contentResolver) {
 		this.contentResolver = contentResolver;
+		this.daoObject = new DAOObject(contentResolver);
 	}
 
 	@Override
@@ -44,8 +47,10 @@ public class DAODictionary implements DAO<DBDictionary>{
 		long ownerId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_OBJECT_ID));
 		String key = cursor.getString(cursor.getColumnIndex(TableDictionary.COL_KEY));
 		long valueId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_VALUE_ID));
+		
+		DBObject obj = daoObject.read(valueId);
 
-		DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId);
+		DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj.toString());
 		dbDictionary.setId((Long) id);
 
 		return dbDictionary;
@@ -65,7 +70,9 @@ public class DAODictionary implements DAO<DBDictionary>{
 				String key = cursor.getString(cursor.getColumnIndex(TableDictionary.COL_KEY));
 				long valueId = cursor.getLong(cursor.getColumnIndex(TableDictionary.COL_VALUE_ID));
 
-				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId);
+				DBObject obj = daoObject.read(valueId);
+
+				DBDictionary dbDictionary = new DBDictionary(ownerId, key, valueId, obj.toString());
 
 				dbDictionary.setId(id);
 				dbDictionaries.add(dbDictionary);

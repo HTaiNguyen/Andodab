@@ -20,4 +20,9 @@ public class DBInteger extends DBObject{
 		this.value = value;
 	}
 	
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+	
 }

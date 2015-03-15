@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBInteger;
-import fr.upem.andodab.table.TableFloat;
 import fr.upem.andodab.table.TableInteger;
 import fr.upem.andodab.table.TableObject;
 

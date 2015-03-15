@@ -213,7 +213,7 @@ public class MainActivity2 extends Activity {
 							primitive = new DBString(currentId, value);
 						}
 
-						DBDictionary dictionary = new DBDictionary(currentId, name, primitive.getId());
+						DBDictionary dictionary = new DBDictionary(currentId, name, primitive.getId(), primitive.toString());
 
 						try {
 							daoDictionary.create(dictionary);
