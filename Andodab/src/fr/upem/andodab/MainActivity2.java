@@ -386,34 +386,60 @@ public class MainActivity2 extends Activity {
 
 	@Override
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
-		if (v.getId() == R.id.objectList) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+		switch (v.getId()) {
+		case R.id.keyList:
+			menu.setHeaderTitle(adapter2.getItem(info.position).getKey());
+
+			String[] menuItems1 = getResources().getStringArray(R.array.keyListMenu);
+
+			for (int i = 0; i < menuItems1.length; i++) {
+				menu.add(Menu.NONE, i, i, menuItems1[i]);
+			}
+
+			break;
+		case R.id.objectList:
 			menu.setHeaderTitle(adapter.getItem(info.position).getName());
 
-			String[] menuItems = getResources().getStringArray(R.array.objectListMenu);
+			String[] menuItems2 = getResources().getStringArray(R.array.objectListMenu);
 
-			for (int i = 0; i<menuItems.length; i++) {
-				menu.add(Menu.NONE, i, i, menuItems[i]);
+			for (int i = 0; i < menuItems2.length; i++) {
+				menu.add(Menu.NONE, i + 2, i, menuItems2[i]);
 			}
-		} else if (v.getId() == R.id.keyList) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			menu.setHeaderTitle(adapter.getItem(info.position).getName());
 
-			String[] menuItems = getResources().getStringArray(R.array.keyListMenu);
-
-			for (int i = 0; i<menuItems.length; i++) {
-				menu.add(Menu.NONE, i, i, menuItems[i]);
-			}
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public boolean onContextItemSelected(final MenuItem item) {
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-		final DBCommon common = adapter.getItem(info.position);
 
 		switch (item.getItemId()) {
 		case 0:
+			// Lancement activite graphique
+
+			break;
+		case 1:
+			final DBDictionary dictionary = adapter2.getItem(info.position);
+
+			try {
+				daoDictionary.delete(dictionary);
+
+				adapter2.remove(dictionary);
+				adapter2.notifyDataSetChanged();
+			} catch (Exception e) {
+				Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
+				toast.show();
+			}
+
+			break;
+		case 2:
+			final DBCommon common1 = adapter.getItem(info.position);
+
 			AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity2.this);
 			alert.setTitle(R.string.button_edit_object_message);
 
@@ -425,7 +451,7 @@ public class MainActivity2 extends Activity {
 			layout.addView(labelName);
 
 			final EditText inputName = new EditText(this); 
-			inputName.setText(common.getName());
+			inputName.setText(common1.getName());
 			layout.addView(inputName);
 
 			final TextView labelSealed = new TextView(this);
@@ -437,7 +463,7 @@ public class MainActivity2 extends Activity {
 			ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, choices); 
 			spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
 			spinnerSealed.setAdapter(spinnerAdapter);
-			String sealed = common.isSealed() ? getResources().getString(R.string.yes) : getResources().getString(R.string.no);
+			String sealed = common1.isSealed() ? getResources().getString(R.string.yes) : getResources().getString(R.string.no);
 			int spinnerPosition = spinnerAdapter.getPosition(sealed);
 			spinnerSealed.setSelection(spinnerPosition);
 			layout.addView(spinnerSealed);
@@ -448,16 +474,16 @@ public class MainActivity2 extends Activity {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					String name = inputName.getText().toString();
 
-					common.setName(name);
+					common1.setName(name);
 
 					if (spinnerSealed.getSelectedItem().equals(getResources().getString(R.string.yes))) {
-						common.setSealed(true);
+						common1.setSealed(true);
 					} else {
-						common.setSealed(false);
+						common1.setSealed(false);
 					}
 
 					try {
-						daoCommon.udpate(common);
+						daoCommon.udpate(common1);
 
 						adapter.getItem(info.position).setName(name);
 						adapter.notifyDataSetChanged();
@@ -477,11 +503,13 @@ public class MainActivity2 extends Activity {
 			alert.show();
 
 			break;
-		case 1:
-			try {
-				daoCommon.delete(common);
+		case 3:
+			final DBCommon common2 = adapter.getItem(info.position);
 
-				adapter.remove(common);
+			try {
+				daoCommon.delete(common2);
+
+				adapter.remove(common2);
 				adapter.notifyDataSetChanged();
 			} catch (Exception e) {
 				Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
