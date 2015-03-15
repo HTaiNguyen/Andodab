@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBString;
+import fr.upem.andodab.table.TableInteger;
 import fr.upem.andodab.table.TableObject;
 import fr.upem.andodab.table.TableString;
 
@@ -20,11 +21,10 @@ public class DAOString implements DAO<DBString> {
 	@Override
 	public void create(DBString dbString) {
 		ContentValues values = new ContentValues();
-
 		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
-		
+		values.put(TableString.COL_TYPE, dbString.getType());
 		dbString.setId(ContentUris.parseId(uri));
-
+		values.clear();
 		values.put(TableString.COL_ID, dbString.getId());
 		values.put(TableString.COL_VALUE, dbString.getValue());
 		values.put(TableString.COL_ANCESTOR_ID, dbString.getAncestorId());

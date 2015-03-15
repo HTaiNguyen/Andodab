@@ -8,7 +8,7 @@ public class DBInteger extends DBObject{
 	}
 
 	public DBInteger(Long ancestorId, Long value) {
-		super(ancestorId);
+		super(ancestorId, "INT");
 		this.value = value;
 	}
 

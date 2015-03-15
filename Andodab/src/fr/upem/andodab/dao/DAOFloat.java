@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBFloat;
+import fr.upem.andodab.table.TableCommon;
 import fr.upem.andodab.table.TableFloat;
 import fr.upem.andodab.table.TableObject;
 
@@ -21,9 +22,9 @@ public class DAOFloat implements DAO<DBFloat>{
 	public void create(DBFloat dbFloat) {
 		ContentValues values = new ContentValues();
 		Uri  uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
-		
+		values.put(TableFloat.COL_TYPE, dbFloat.getType());
 		dbFloat.setId(ContentUris.parseId(uri));
-	
+		values.clear();
 		values.put(TableFloat.COL_ID, dbFloat.getId());
 		values.put(TableFloat.COL_VALUE, dbFloat.getValue());
 		values.put(TableFloat.COL_ANCESTOR_ID, dbFloat.getAncestorId());

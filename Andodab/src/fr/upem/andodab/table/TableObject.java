@@ -14,10 +14,12 @@ public abstract class TableObject implements BaseColumns {
 
 	public static final String COL_ID = "id";
 	public static final String COL_ANCESTOR_ID = "ancestor_id";
+	public static final String COL_TYPE = "type";
 	
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TableObject.TABLE_NAME + " (" + 
-					COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" +
+					COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					COL_TYPE + "TEXT" +
 					");";
 	
 	public static final String SQL_DROP_TABLE = 

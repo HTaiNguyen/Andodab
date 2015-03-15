@@ -5,7 +5,7 @@ public class DBString extends DBObject{
 	private String value;
 
 	public DBString(Long ancestorId, String value) {
-		super(ancestorId);
+		super(ancestorId, "STRING");
 		this.value = value;
 	}
 
