@@ -5,4 +5,9 @@
         <item>Modifier</item>
         <item>Supprimer</item>
     </array>
-</resources>
+    <array name="keyListMenu">
+        <item>Modifier</item>
+        <item>Supprimer</item>
+    </array>
+
+</resources>

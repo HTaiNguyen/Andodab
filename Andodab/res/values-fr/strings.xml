@@ -6,16 +6,22 @@
     <string name="title_object_list">Liste des objets</string>
     <string name="button_add_object">Ajouter un objet</string>
     <string name="button_add_object_title">Ajouter un objet</string>
-    <string name="button_add_object_message">Nom de l\'objet</string>
+    <string name="button_add_object_name">Nom de l\'objet :</string>
+    <string name="button_add_object_sealed">Sceller :</string>
     <string name="button_edit_object_message">Veuillez modifier le nom de l\'objet</string>
     <string name="button_edit_object_ok">OK</string>
     <string name="button_edit_object_cancel">Annuler</string>
     <string name="title_activity_main_activity2">Andodab</string>
     <string name="button_add_key">Ajouter un attribut</string>
     <string name="button_add_key_title">Ajouter un attribut</string>
-    <string name="button_add_key_message">Nom de l\'attribut</string>
+    <string name="button_add_key_name">Nom de l\'attribut :</string>
+    <string name="button_add_key_type">Type d\'objet :</string>
+    <string name="button_add_key_objects">Liste des objets :</string>
+    <string name="button_add_key_value">Valeur :</string>
     <string name="error_message">Une erreur s\'est produite</string>
     <string name="message_object_list">Aucun objet</string>
     <string name="message_key_list">Aucun attribut</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 
 </resources>

@@ -5,5 +5,8 @@
         <item>Edit</item>
         <item>Remove</item>
     </array>
-
-</resources>
+    <array name="keyListMenu">
+        <item>Edit</item>
+        <item>Remove</item>
+    </array>
+</resources>

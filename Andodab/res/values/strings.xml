@@ -6,22 +6,25 @@
     <string name="title_object_list">List of objects</string>
     <string name="button_add_object">Add an object</string>
     <string name="button_add_object_title">Add an object</string>
-    <string name="button_add_object_message">Name of object</string>
+    <string name="button_add_object_name">Name of object :</string>
+    <string name="button_add_object_sealed">Sealed :</string>
     <string name="button_edit_object_message">Please change the name of the object</string>
     <string name="button_edit_object_ok">OK</string>
     <string name="button_edit_object_cancel">Cancel</string>
     <string name="title_activity_main_activity2">Andodab</string>
     <string name="button_add_key">Add an attribute</string>
     <string name="button_add_key_title">Add an attribute</string>
-    <string name="button_add_key_message">Attribute name</string>
+    <string name="button_add_key_name">Name of attribute :</string>
+    <string name="button_add_key_type">Type of object :</string>
+    <string name="button_add_key_objects">List of objects :</string>
+    <string name="button_add_key_value">Value :</string>
     <string name="error_message">An error has occurred</string>
     <string name="message_object_list">No object</string>
     <string name="message_key_list">No attribute</string>
+
     <string name="title_activity_notification">NotificationActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_notification_view">NotificationView</string>
-    
-     
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Broadcast Tutorial</string>
     <string name="notificationtitle">Broadcast Tutorial</string>
@@ -31,4 +34,7 @@
     <string name="wifioff">WIFI OFF</string>
     <string name="wifion">WIFI ON</string>
 
-</resources>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
+

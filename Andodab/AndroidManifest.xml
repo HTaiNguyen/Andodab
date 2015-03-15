@@ -53,11 +53,23 @@
                 </action>
             </intent-filter>
         </receiver>
+        <provider
+            android:name=".db.DBManager"
+            android:authorities="fr.upem.test.DbManager"
+            android:exported="false"
+            android:syncable="true" />
 
         <activity
             android:name="test.NotificationView"
             android:label="@string/title_activity_notification_view" >
         </activity>
+        <activity
+            android:name=".NotificationActivity"
+            android:label="label" >
+        </activity>
+
+        <service android:name="fr.upem.andodab.NotificationService" >
+        </service>
     </application>
 
 </manifest>

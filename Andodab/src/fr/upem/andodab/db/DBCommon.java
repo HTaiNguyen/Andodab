@@ -42,5 +42,5 @@ public class DBCommon extends DBObject {
 
 	public void setSealed(boolean sealed) {
 		this.sealed = sealed;
-	}	
+	}
 }
