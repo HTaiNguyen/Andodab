@@ -1,4 +1,4 @@
-package fr.upem.andolab.gui;
+package fr.upem.andodab.gui;
 
 import java.util.List;
 
@@ -15,13 +15,18 @@ public class Box extends View {
 	
 	private DBCommon dbCommon;
 	private List<DBDictionary> dbDictionaries;
+	
+	private int x;
+	private int y;
 
-	public Box(Context context, int color, DBCommon dbCommmon, List<DBDictionary> dbDictionaries) {
+	public Box(Context context, int color, int x, int y, DBCommon dbCommmon, List<DBDictionary> dbDictionaries) {
 		super(context);
 		this.dbCommon = dbCommmon;
 		this.dbDictionaries = dbDictionaries;
 		paint = new Paint();
 		paint.setColor(color);
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
