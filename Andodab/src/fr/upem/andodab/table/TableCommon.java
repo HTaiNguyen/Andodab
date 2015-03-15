@@ -36,25 +36,25 @@ public class TableCommon extends TableObject {
 					");";
 	
 	public static final String SQL_INIT_TABLE = 
-				"INSERT OR ABORT INTO" + TABLE_NAME + "("
+				"INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
 					+ "VALUES("+ ROOT_ID + ", " + "NULL" + ", " + ROOT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORT INTO" + TABLE_NAME + "("
+				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
 					+ "VALUES("+ INT_ID + ", " + ROOT_ID + ", " + INT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORD INTO" + TABLE_NAME + "("
+				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
 					+ COL_SEALED + ", "
 					+ "VALUES("+ FLOAT_ID + ", " + ROOT_ID + ", " + FLOAT_NAME + ", "+ "1" + ");"
-				+ "INSERT OR ABORD INTO" + TABLE_NAME + "("
+				+ "INSERT OR ABORT INTO " + TABLE_NAME + "("
 					+ COL_ID + ", "
 					+ COL_ANCESTOR_ID + ", "
 					+ COL_NAME + ", "
@@ -66,7 +66,7 @@ public class TableCommon extends TableObject {
 	
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(SQL_CREATE_TABLE);
-		database.execSQL(SQL_INIT_TABLE);
+		//database.execSQL(SQL_INIT_TABLE);
 	}
 	
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion,
