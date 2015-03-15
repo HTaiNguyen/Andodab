@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.table.TableCommon;
+import fr.upem.andodab.table.TableObject;
 
 public class DAOCommon implements DAO<DBCommon>{
 
@@ -22,7 +23,7 @@ public class DAOCommon implements DAO<DBCommon>{
 	@Override
 	public void create(DBCommon dbCommon) {
 		ContentValues values = new ContentValues();
-		Uri uri = contentResolver.insert(TableCommon.CONTENT_URI, values);	
+		Uri uri = contentResolver.insert(TableObject.CONTENT_URI, values);	
 		
 		dbCommon.setId(ContentUris.parseId(uri));
 
