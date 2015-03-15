@@ -3,6 +3,7 @@ package fr.upem.andodab.table;
 import fr.upem.andodab.db.DBManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 public class TableInteger extends TableObject{
 	public static final String TABLE_NAME = "integer";
@@ -15,9 +16,8 @@ public class TableInteger extends TableObject{
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TableInteger.TABLE_NAME + " (" + 
 					TableInteger.COL_ID + " INTEGER, " + 
-					TableInteger.COL_VALUE + " INTEGER, " + 
-					"PRIMARY KEY (" + TableInteger.COL_ID + "), " +
-					"FOREIGN KEY (" + TableInteger.COL_ID + ") REFERENCES " + TABLE_NAME + "(" + COL_ID + ")" +
+					TableInteger.COL_ANCESTOR_ID + " INTEGER, " +
+					TableInteger.COL_VALUE + " INTEGERZ " +
 					");";
 	public static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -25,6 +25,15 @@ public class TableInteger extends TableObject{
 	
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(SQL_CREATE_TABLE);
+	}
+	
+	public static void onUpgrade(SQLiteDatabase database, int oldVersion,
+		      int newVersion) {
+		    Log.w(TABLE_NAME , "Upgrading database from version "
+		        + oldVersion + " to " + newVersion
+		        + ", which will destroy all old data");
+		    database.execSQL(SQL_DROP_TABLE);
+		    onCreate(database);
 	}
 
 }

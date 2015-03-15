@@ -12,12 +12,11 @@ public class TableString extends TableObject{
 	
 	public static final String COL_VALUE = "value";
 	
-	public static final String SQL_CREATE_TABLE_STRING = 
+	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TableString.TABLE_NAME + " (" + 
 					TableString.COL_ID + " INTEGER, " + 
-					TableString.COL_VALUE + " TEXT, " + 
-					"PRIMARY KEY (" + TableString.COL_ID + "), " +
-					"FOREIGN KEY (" + TableString.COL_ID + ") REFERENCES " + TABLE_NAME + "(" + COL_ID + ")" +
+					TableString.COL_ANCESTOR_ID + " INTEGER, " +
+					TableString.COL_VALUE + " TEXT " + 
 					");";
 	
 	public static final String SQL_DROP_TABLE_STRING = 

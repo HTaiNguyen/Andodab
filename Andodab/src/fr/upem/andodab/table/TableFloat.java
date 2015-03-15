@@ -15,6 +15,7 @@ public class TableFloat extends TableObject{
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
 					TableFloat.COL_ID + " INTEGER, " + 
+					TableFloat.COL_ANCESTOR_ID + " INTEGER, " +
 					TableFloat.COL_VALUE + " REAL, " + 
 					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
