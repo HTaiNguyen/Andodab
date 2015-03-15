@@ -28,10 +28,10 @@ public class TableCommon extends TableObject {
 
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
-					TableCommon.COL_ID + " INTEGER, " +
-					TableCommon.COL_ANCESTOR_ID + " INTEGER, " +
-					TableCommon.COL_NAME + " VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE, " + 
-					TableCommon.COL_SEALED + " BOOLEAN," + 
+					COL_ID + " INTEGER, " +
+					COL_ANCESTOR_ID + " INTEGER, " +
+					COL_NAME + " VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE, " + 
+					COL_SEALED + " BOOLEAN," + 
 					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
 	

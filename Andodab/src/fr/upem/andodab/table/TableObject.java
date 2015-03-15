@@ -19,7 +19,7 @@ public abstract class TableObject implements BaseColumns {
 	public static final String SQL_CREATE_TABLE = 
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + 
 					COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					COL_TYPE + "TEXT" +
+					COL_TYPE + " TEXT" +
 					");";
 	
 	public static final String SQL_DROP_TABLE = 

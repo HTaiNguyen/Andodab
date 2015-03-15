@@ -17,7 +17,8 @@ public class TableInteger extends TableObject{
 			"CREATE TABLE IF NOT EXISTS " + TableInteger.TABLE_NAME + " (" + 
 					TableInteger.COL_ID + " INTEGER, " + 
 					TableInteger.COL_ANCESTOR_ID + " INTEGER, " +
-					TableInteger.COL_VALUE + " INTEGERZ " +
+					TableInteger.COL_VALUE + " INTEGER, " +
+					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
 	public static final String SQL_DROP_TABLE = 
 			"DROP TABLE IF EXISTS " + TABLE_NAME;

@@ -16,7 +16,8 @@ public class TableString extends TableObject{
 			"CREATE TABLE IF NOT EXISTS " + TableString.TABLE_NAME + " (" + 
 					TableString.COL_ID + " INTEGER, " + 
 					TableString.COL_ANCESTOR_ID + " INTEGER, " +
-					TableString.COL_VALUE + " TEXT " + 
+					TableString.COL_VALUE + " TEXT, " + 
+					"PRIMARY KEY (" + COL_ID + ")" +
 					");";
 	
 	public static final String SQL_DROP_TABLE_STRING = 
