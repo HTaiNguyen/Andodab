@@ -20,8 +20,8 @@ import android.util.Log;
 
 public class DBManager extends ContentProvider {
 	public static final String AUTHORITY = "fr.upem.test.DbManager";
-	public static final String Table_NAME = "andodab.db";
-	public static final int Table_VERSION = 1;
+	public static final String DB_NAME = "andodab.db";
+	public static final int DB_VERSION = 1;
 
 	private Context context;
 	private DbHelper dbHelper;
@@ -60,7 +60,7 @@ public class DBManager extends ContentProvider {
 
 	private final class DbHelper extends SQLiteOpenHelper {
 		public DbHelper(Context context) {
-			super(context, Table_NAME, null, Table_VERSION);
+			super(context, DB_NAME, null, DB_VERSION);
 		}
 		
 		@Override

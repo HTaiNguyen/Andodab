@@ -64,18 +64,16 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-//		deleteDatabase(DBManager.DB_NAME);
+		deleteDatabase(DBManager.DB_NAME);
 
 		dbManager = new DBManager();
 		dbManager.onCreate();
 
 		daoCommon = new DAOCommon(getContentResolver());
 
-		try {
+
 			DBInit();
-		} catch (Exception e) {
-			// Erreur d'initialisation
-		}
+
 
 		addButtonObject = (Button) findViewById(R.id.addButtonObject);
 		addButtonObject.setOnClickListener(new OnClickListener() {
@@ -292,15 +290,13 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public boolean DBInit() throws Exception {
-		try {
+	public boolean DBInit() {
+
 			daoCommon.create(new DBCommon(null, "Root", false));
 			daoCommon.create(new DBCommon(1L, "Float", false));
 			daoCommon.create(new DBCommon(1L, "Int", false));
 			daoCommon.create(new DBCommon(1L, "String", false));
-		} catch (Exception e) {
-			throw new Exception(e); 
-		}
+
 
 		return true;
 	}
