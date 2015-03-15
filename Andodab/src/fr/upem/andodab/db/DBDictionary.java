@@ -6,7 +6,6 @@ public class DBDictionary {
 	private Long ownerId;
 	private String key;
 	private Long valueId;
-	
 	private String valueName;
 
 	public DBDictionary() {
@@ -50,7 +49,7 @@ public class DBDictionary {
 	public void setValue(Long valueId) {
 		this.valueId = valueId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return key + " = "+ valueName;

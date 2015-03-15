@@ -15,6 +15,7 @@ import fr.upem.andodab.db.DBInteger;
 import fr.upem.andodab.db.DBManager;
 import fr.upem.andodab.db.DBObject;
 import fr.upem.andodab.db.DBString;
+import fr.upem.andolab.gui.Diagram;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -420,16 +421,21 @@ public class MainActivity2 extends Activity {
 
 		switch (item.getItemId()) {
 		case 0:
-			// Lancement activite graphique
+			final DBDictionary dictionary0 = adapter2.getItem(info.position);
+
+			// VERIFIER SI OBJET OU PRIMITIF
+			
+			Intent intent = new Intent(getBaseContext(), Diagram.class);
+			startActivity(intent);
 
 			break;
 		case 1:
-			final DBDictionary dictionary = adapter2.getItem(info.position);
+			final DBDictionary dictionary1 = adapter2.getItem(info.position);
 
 			try {
-				daoDictionary.delete(dictionary);
+				daoDictionary.delete(dictionary1);
 
-				adapter2.remove(dictionary);
+				adapter2.remove(dictionary1);
 				adapter2.notifyDataSetChanged();
 			} catch (Exception e) {
 				Toast toast = Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_SHORT);
