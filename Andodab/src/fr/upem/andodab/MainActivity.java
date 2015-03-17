@@ -6,7 +6,6 @@ import java.util.List;
 import fr.upem.andodab.dao.DAOCommon;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
-import fr.upem.drownedman.DrownedManActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
