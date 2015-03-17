@@ -51,5 +51,6 @@
     <string name="client_text">This device will act as a client. Click on Gallery button to pick a local(stored) file</string>
     <string name="empty"></string>
     <string name="title_activity_diagram_acitivty">DiagramAcitivty</string>
+    <string name="sync_title">Synchronize</string>
 
 </resources>

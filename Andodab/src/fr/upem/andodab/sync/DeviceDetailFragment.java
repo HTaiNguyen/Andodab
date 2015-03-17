@@ -118,7 +118,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
         getActivity().startService(serviceIntent);
     }
-
+    
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         if (progressDialog != null && progressDialog.isShowing()) {

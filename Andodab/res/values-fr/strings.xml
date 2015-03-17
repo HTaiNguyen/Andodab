@@ -26,5 +26,6 @@
     <string name="title_activity_diagram">Andodab</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="sync_title">Synchroniser</string>
 
 </resources>
