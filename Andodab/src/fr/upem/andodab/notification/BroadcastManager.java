@@ -16,6 +16,12 @@ public class BroadcastManager extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*@Override
+	public void onReceive(Context context, Intent intent) {
 
 		if (!isNetworkAvailable(context)) {
 			Notification(context, "Wifi Connection Off");
@@ -71,6 +77,6 @@ public class BroadcastManager extends BroadcastReceiver {
 		NetworkInfo activeNetworkInfo = connectivityManager
 				.getActiveNetworkInfo();
 		return activeNetworkInfo != null;
-	}
+	}*/
 
 }

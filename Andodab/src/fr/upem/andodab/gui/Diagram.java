@@ -8,33 +8,38 @@ import fr.upem.andodab.dao.DAODictionary;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.table.TableCommon;
 import android.app.Activity;
-import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.widget.LinearLayout;
+import android.view.Display;
 
 public class Diagram extends Activity {
-	private ArrayList<Box> boxes;
+	private static final int LEVEL_OFFSET = 100;
+
+	private Area area;
 	private DAOCommon daoCommon;
 	private DAODictionary daoDictionary;
-
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		//Create Vertical Layout
-		LinearLayout VL = new LinearLayout(this);
-		VL.setOrientation(LinearLayout.VERTICAL);
 
 		daoCommon = new DAOCommon(getContentResolver());
 		daoDictionary = new DAODictionary(getContentResolver());
+		
 		List<DBCommon> commons = daoCommon.findByAncestor(this.getIntent().getLongExtra(TableCommon.COL_ID, 1L));
+		
 		ArrayList<Box> boxes = new ArrayList<Box>();
 		
-		for(DBCommon common : commons) {
-			boxes.add(new Box(this, Color.BLACK, 50, 50, common, daoDictionary.findByObject(common.getId()))); 
-			VL.addView(new Box(this, Color.BLACK, 50, 50, common, daoDictionary.findByObject(common.getId())));
+		for (DBCommon common : commons) {
+			// Créer les boites
+			//boxes.add(new Box(this, new Point(100 - BOX_WIDTH / 2, 100), BOX_WIDTH, BOX_HEIGHT, common, daoDictionary.findByObject(common.getId()))); 
 		}
+		
+		boxes.add(new Box(this, new Point(100 / 2, 100), null, null));
+		boxes.add(new Box(this, new Point(100 / 2, 300), null, null));
+		boxes.add(new Box(this, new Point(100 / 2, 500), null, null));
 
-		setContentView(VL);
+		Area area = new Area(this, boxes);
+		setContentView(area);
 	}
 }

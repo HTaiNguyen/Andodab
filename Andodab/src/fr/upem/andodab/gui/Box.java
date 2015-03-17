@@ -6,52 +6,104 @@ import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBDictionary;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class Box extends View {
-	private Paint paint;
-
-	private final static int PADDING = 4;
-	
+	private Point position;
+	private int width;
+	private int height;
+	private Point initialPosition;
+	private Point offsetPosition;
 	private DBCommon dbCommon;
 	private List<DBDictionary> dbDictionaries;
-	
-	private int x;
-	private int y;
 
-	public Box(Context context, int color, int x, int y, DBCommon dbCommmon, List<DBDictionary> dbDictionaries) {
+	public Box(Context context, Point position, DBCommon dbCommmon, List<DBDictionary> dbDictionaries) {
 		super(context);
+
+		this.position = new Point(position.x, position.y);
+
+		initialPosition = new Point();
+		offsetPosition = new Point();
+
 		this.dbCommon = dbCommmon;
 		this.dbDictionaries = dbDictionaries;
-		paint = new Paint();
-		paint.setColor(color);
-		this.x = x;
-		this.y = y;
 	}
 
 	@Override
-	public void onDraw(Canvas canvas) {
-		paint.setTextSize(16);
-		
-		canvas.drawText(dbCommon.getName(), y, x, paint);
-		int y = 24;
-		float height=8;
-		float width = paint.measureText(dbCommon.getName());
+	public boolean onTouchEvent(MotionEvent event) {
+		super.onTouchEvent(event);
 
-		for(DBDictionary dbDictionary : dbDictionaries) {
-			float textWidth = paint.measureText(dbDictionary.toString());
-			if(textWidth > width) {
+		int action = event.getAction();
+
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			initialPosition = position;
+
+			offsetPosition = new Point((int) event.getX(), (int) event.getY());
+
+			if (offsetPosition.x >= position.x && offsetPosition.x <= (position.x + width) && offsetPosition.y >= position.y && offsetPosition.y <= (position.y + height)) {
+				// selection de la box
+			}
+
+			break;
+		case MotionEvent.ACTION_MOVE:
+			position = new Point(initialPosition.x + (int) event.getX() - offsetPosition.x, initialPosition.y + (int) event.getY() - offsetPosition.y);
+
+			break;
+		}
+
+		return true;
+	}
+
+	@Override
+	public void draw(Canvas canvas) {
+		super.draw(canvas);
+
+		int padding = 5;
+
+		float height = 0;
+		float width = 0;
+
+		Paint paint = new Paint();
+
+		paint.setColor(Color.rgb(0, 130, 0));
+		paint.setTextSize(10.0f);
+
+		String name = "OBJET";
+		int yTitle = position.y + (int) paint.getTextSize() + padding;
+		height = yTitle - position.y;
+		width = paint.measureText(name);
+
+		canvas.drawText(name, position.x + padding, yTitle, paint);
+
+		String[] attributes = { "ATTR1 : VALUE1", "ATTR2 : VALUE2", "ATTR3 : VALUE3", "ATTR4 : VALUE4", "ATTR5 : VALUE5" };
+
+		int yAttribute = yTitle + (2 * padding);
+		height += 2 * padding;
+
+		for (int i = 0; i < attributes.length; i++) {
+			float textWidth = paint.measureText(attributes[i]);
+
+			if (textWidth > width) {
 				width = textWidth;
 			}
-			canvas.drawText(dbDictionary.toString(), this.x, this.y+y, paint);
-			y += 20;
-			height += 16;
-			
+
+			yAttribute += (int) paint.getTextSize() + padding;
+			height += (int) paint.getTextSize() + padding;
+
+			canvas.drawText(attributes[i], position.x + padding, yAttribute, paint);
 		}
+
+		paint.setColor(Color.rgb(0, 130, 0));
+		paint.setAntiAlias(true);
 		paint.setStyle(Paint.Style.STROKE);
-		canvas.drawRect(this.x-PADDING, this.y-PADDING-8, this.x+width+PADDING, this.y+8, paint);
-		canvas.drawRect(this.x-PADDING, this.y-PADDING-8, this.x+width+PADDING, this.y+height+PADDING, paint);
-		
+
+		canvas.drawRect(position.x, position.y, position.x + width + (2 * padding), position.y + height + padding, paint);
+
+		invalidate();
 	}
 }
