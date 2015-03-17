@@ -6,6 +6,7 @@ import java.util.List;
 import fr.upem.andodab.dao.DAOCommon;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBManager;
+import fr.upem.drownedman.DrownedManActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -183,6 +184,13 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 
 		if (id == R.id.action_settings) {
+			return true;
+		}
+		
+		if (id == R.id.sync) {
+			Intent intent = new Intent(getBaseContext(), SyncActivity.class);
+			
+			startActivity(intent);
 			return true;
 		}
 
