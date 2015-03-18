@@ -18,7 +18,7 @@ import android.view.View;
 public class Box extends View {
 	
 	private final static int PADDING = 5;
-	private final static int MARGIN = 5;
+	private final static int MARGIN = 25;
 	
 	private Point position;
 	private Point initialPosition;
@@ -31,6 +31,7 @@ public class Box extends View {
 	
 	private float width;
 	private float height;
+	private float heightMaxLevel;
 
 	public Paint textPaint;
 
@@ -48,6 +49,7 @@ public class Box extends View {
 		
 		width = 0;
 		height = 0;
+		heightMaxLevel = 0;
 		
 		textPaint = new Paint();
 		textPaint.setColor(Color.rgb(0, 130, 0));
@@ -61,19 +63,27 @@ public class Box extends View {
 		List<DBCommon> commons = daoCommon.findByAncestor(dbCommon.getId());
 		
 		ArrayList<Box> boxes = new ArrayList<Box>();
-		float heightMaxLayer = 0;
+		float heightMaxLevel = 0;
 		for (DBCommon common : commons) {
 			Box box = Box.createBox(context, common);
 			box.computeBoxSize();
 			
-			if (heightMaxLayer < box.height) {
-				heightMaxLayer = box.height;
+			if (heightMaxLevel < box.height) {
+				heightMaxLevel = box.height;
 			}
-			
 			boxes.add(box);
 		}
+		
+		for(Box b : boxes) {
+			b.heightMaxLevel = heightMaxLevel;
+		}
+		
 		Box box = new Box(context, dbCommon, daoDictionary.findByObject(dbCommon.getId()), boxes);
 		box.computeBoxSize();
+		if(box.heightMaxLevel == 0) {
+			box.heightMaxLevel = box.height;
+		}
+		
 		return box;
 	}
 	
@@ -106,23 +116,30 @@ public class Box extends View {
 
 	@Override
 	public void draw(Canvas canvas) {
-		drawBox(canvas);
-		if(boxes.isEmpty()) {
-			canvas.translate(width+MARGIN, 0);
-		}
-
 		if(!boxes.isEmpty()) {
-			canvas.translate(0, height+MARGIN);
+			canvas.translate(0, heightMaxLevel+MARGIN);
 		}
-		
+		float maxWidth = 0;
 		for(Box b : boxes) {
 			b.draw(canvas);
+			maxWidth += b.getBoxWidth()+10; 
+
+			if(!b.boxes.isEmpty()) {
+				canvas.translate(b.width+10, 0);
+			}
 		}
 		
 		if(!boxes.isEmpty()) {
-			canvas.translate(0, -(height+MARGIN));
+			canvas.translate(0, -(heightMaxLevel+MARGIN));
+			canvas.translate(-(maxWidth/2)-width/2, 0);
 		}
 		
+		drawBox(canvas);
+		
+		if(boxes.isEmpty()) {
+			canvas.translate(width+10, 0);
+		}
+
 		invalidate();
 	}
 	
@@ -194,6 +211,8 @@ public class Box extends View {
 	public float getBoxWidth() {
 		return width;
 	}
+	
+	
 	
 	
 }
