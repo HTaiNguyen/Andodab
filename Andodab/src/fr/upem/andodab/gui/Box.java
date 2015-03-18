@@ -38,6 +38,7 @@ public class Box extends View {
 	private Box(Context context, DBCommon dbCommmon, List<DBDictionary> dbDictionaries, List<Box> boxes) {
 		super(context);
 
+		
 		this.position = new Point(0, 0);
 		this.initialPosition = new Point();
 		this.offsetPosition = new Point();
@@ -116,7 +117,7 @@ public class Box extends View {
 
 	@Override
 	public void draw(Canvas canvas) {
-		if(!boxes.isEmpty()) {
+		/*if(!boxes.isEmpty()) {
 			canvas.translate(0, heightMaxLevel+MARGIN);
 		}
 		float maxWidth = 0;
@@ -139,8 +140,25 @@ public class Box extends View {
 		if(boxes.isEmpty()) {
 			canvas.translate(width+10, 0);
 		} else {
-			canvas.translate((maxWidth/2)+width/2-width,0);
+			//canvas.translate((maxWidth/2)+width/2-width,0);
+		}*/
+		
+		drawBox(canvas);
+		if(boxes.isEmpty()) {
+		canvas.translate(width+MARGIN, 0);
 		}
+		if(!boxes.isEmpty()) {
+		canvas.translate(0, height+MARGIN);
+		}
+		
+		for(Box b : boxes) {
+		b.draw(canvas);
+		}
+		
+		if(!boxes.isEmpty()) {
+		canvas.translate(0, -(height+MARGIN));
+		}
+
 
 		invalidate();
 	}
