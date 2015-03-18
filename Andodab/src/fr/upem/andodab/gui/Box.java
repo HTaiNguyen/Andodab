@@ -138,6 +138,8 @@ public class Box extends View {
 		
 		if(boxes.isEmpty()) {
 			canvas.translate(width+10, 0);
+		} else {
+			canvas.translate((maxWidth/2)+width/2-width,0);
 		}
 
 		invalidate();

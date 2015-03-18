@@ -46,7 +46,7 @@ public class DAOCommon implements DAO<DBCommon>{
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableCommon.COL_ANCESTOR_ID));
 		String name = cursor.getString(cursor.getColumnIndex(TableCommon.COL_NAME));
 		boolean sealed = cursor.getInt(cursor.getColumnIndex(TableCommon.COL_SEALED)) > 0;
-
+		cursor.close();
 		DBCommon dbCommon = new DBCommon(ancestorId, name, sealed);
 		dbCommon.setId((Long) id);
 
@@ -73,6 +73,7 @@ public class DAOCommon implements DAO<DBCommon>{
 				dbCommons.add(dbCommon);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 
 		return dbCommons;
 
@@ -95,6 +96,7 @@ public class DAOCommon implements DAO<DBCommon>{
 				dbCommons.add(dbCommon);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 
 		return dbCommons;
 	}

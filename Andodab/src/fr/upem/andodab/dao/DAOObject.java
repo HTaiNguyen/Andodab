@@ -38,7 +38,7 @@ public class DAOObject implements DAO<DBObject> {
 		}
 		
 		String type = cursor.getString(cursor.getColumnIndex(TableObject.COL_TYPE ));
-
+		cursor.close();
 		switch(type) {
 			case "COMMON":
 				return daoCommon.read(id);

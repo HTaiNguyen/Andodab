@@ -44,7 +44,7 @@ public class DAOFloat implements DAO<DBFloat>{
 		
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableFloat.COL_ANCESTOR_ID));
 		Float value = cursor.getFloat(cursor.getColumnIndex(TableFloat.COL_VALUE));
-		
+		cursor.close();
 		DBFloat dbFloat = new DBFloat(ancestorId, value);
 		dbFloat.setId((Long)id);
 		return dbFloat;

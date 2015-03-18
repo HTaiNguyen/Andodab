@@ -45,7 +45,7 @@ public class DAOString implements DAO<DBString> {
 		
 		String value = cursor.getString(cursor.getColumnIndex(TableString.COL_VALUE));
 		long ancestorId = cursor.getLong(cursor.getColumnIndex(TableString.COL_ANCESTOR_ID));
-		
+		cursor.close();
 		DBString dbString = new DBString(ancestorId, value);
 		dbString.setId((Long)id);
 		return dbString;
