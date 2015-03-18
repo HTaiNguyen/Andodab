@@ -3,95 +3,105 @@ package fr.upem.andodab.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.upem.andodab.dao.DAOCommon;
-import fr.upem.andodab.dao.DAODictionary;
-import fr.upem.andodab.db.DBCommon;
-import fr.upem.andodab.db.DBDictionary;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
+import fr.upem.andodab.dao.DAOCommon;
+import fr.upem.andodab.dao.DAODictionary;
+import fr.upem.andodab.db.DBCommon;
+import fr.upem.andodab.db.DBDictionary;
 
 public class Box extends View {
-	
+
 	private final static int PADDING = 5;
 	private final static int MARGIN = 25;
-	
+
 	private Point position;
 	private Point initialPosition;
 	private Point offsetPosition;
-	
+
 	private DBCommon dbCommon;
 	private List<DBDictionary> dbDictionaries;
-	
+
 	private ArrayList<Box> boxes;
-	
+
 	private float width;
 	private float height;
 	private float heightMaxLevel;
 
 	public Paint textPaint;
 
+	private static final int INVALID_POINTER_ID = -1;
+	private int mActivePointerId = INVALID_POINTER_ID;
+	private ScaleGestureDetector mScaleDetector;
+	private float mScaleFactor = 1.f;
+
 	private Box(Context context, DBCommon dbCommmon, List<DBDictionary> dbDictionaries, List<Box> boxes) {
 		super(context);
 
-		
+
 		this.position = new Point(0, 0);
 		this.initialPosition = new Point();
 		this.offsetPosition = new Point();
 
 		this.dbCommon = dbCommmon;
 		this.dbDictionaries = dbDictionaries;
-		
+
 		this.boxes = (ArrayList<Box>) boxes;
-		
+
 		width = 0;
 		height = 0;
 		heightMaxLevel = 0;
-		
+
 		textPaint = new Paint();
 		textPaint.setColor(Color.rgb(0, 130, 0));
 		textPaint.setTextSize(10.0f);
+
+		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 	}
-	
+
 	public static Box createBox(Context context, DBCommon dbCommon) {
 		DAOCommon daoCommon = new DAOCommon(context.getContentResolver());
 		DAODictionary daoDictionary = new DAODictionary(context.getContentResolver());
-		
+
 		List<DBCommon> commons = daoCommon.findByAncestor(dbCommon.getId());
-		
+
 		ArrayList<Box> boxes = new ArrayList<Box>();
 		float heightMaxLevel = 0;
 		for (DBCommon common : commons) {
 			Box box = Box.createBox(context, common);
 			box.computeBoxSize();
-			
+
 			if (heightMaxLevel < box.height) {
 				heightMaxLevel = box.height;
 			}
 			boxes.add(box);
 		}
-		
+
 		for(Box b : boxes) {
 			b.heightMaxLevel = heightMaxLevel;
 		}
-		
+
 		Box box = new Box(context, dbCommon, daoDictionary.findByObject(dbCommon.getId()), boxes);
 		box.computeBoxSize();
 		if(box.heightMaxLevel == 0) {
 			box.heightMaxLevel = box.height;
 		}
-		
+
 		return box;
 	}
-	
+
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
+
+		mScaleDetector.onTouchEvent(event);
 
 		int action = event.getAction();
 
@@ -110,6 +120,17 @@ public class Box extends View {
 			position = new Point(initialPosition.x + (int) event.getX() - offsetPosition.x, initialPosition.y + (int) event.getY() - offsetPosition.y);
 
 			break;
+		case MotionEvent.ACTION_POINTER_UP: 
+			final int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) 
+			>> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+			final int pointerId = event.getPointerId(pointerIndex);
+			if (pointerId == mActivePointerId) {
+				final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+				initialPosition = new Point((int) event.getX(newPointerIndex), (int) event.getY(newPointerIndex));
+				mActivePointerId = event.getPointerId(newPointerIndex);
+
+				break;
+			}
 		}
 
 		return true;
@@ -129,40 +150,41 @@ public class Box extends View {
 				canvas.translate(b.width+10, 0);
 			}
 		}
-		
+
 		if(!boxes.isEmpty()) {
 			canvas.translate(0, -(heightMaxLevel+MARGIN));
 			canvas.translate(-(maxWidth/2)-width/2, 0);
 		}
-		
+
 		drawBox(canvas);
-		
+
 		if(boxes.isEmpty()) {
 			canvas.translate(width+10, 0);
 		} else {
 			//canvas.translate((maxWidth/2)+width/2-width,0);
 		}*/
 		canvas.translate(position.x,position.y);
+		canvas.scale(mScaleFactor, mScaleFactor);
 		drawBox(canvas);
 		if(boxes.isEmpty()) {
-		canvas.translate(width+MARGIN, 0);
+			canvas.translate(width+MARGIN, 0);
 		}
 		if(!boxes.isEmpty()) {
-		canvas.translate(0, height+MARGIN);
+			canvas.translate(0, height+MARGIN);
 		}
-		
+
 		for(Box b : boxes) {
-		b.draw(canvas);
+			b.draw(canvas);
 		}
-		
+
 		if(!boxes.isEmpty()) {
-		canvas.translate(0, -(height+MARGIN));
+			canvas.translate(0, -(height+MARGIN));
 		}
 
 
 		invalidate();
 	}
-	
+
 	private void drawBox(Canvas canvas) {
 		float height = 0;
 		float width = 0;
@@ -200,7 +222,7 @@ public class Box extends View {
 		canvas.drawRect(0, 0, width + PADDING, height + PADDING, paint);
 
 	}
-	
+
 	private void computeBoxSize() {
 		int yTitle = position.y + (int) textPaint.getTextSize() + PADDING;
 		height = yTitle - position.y;
@@ -227,12 +249,20 @@ public class Box extends View {
 	public float getBoxHeight() {
 		return height;
 	}
-	
+
 	public float getBoxWidth() {
 		return width;
 	}
-	
-	
-	
-	
+
+	private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+		@Override
+		public boolean onScale(ScaleGestureDetector detector) {
+			mScaleFactor *= detector.getScaleFactor();
+			mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+			invalidate();
+
+			return true;
+		}
+	}	
 }
