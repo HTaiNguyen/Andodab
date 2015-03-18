@@ -29,15 +29,19 @@ public class Diagram extends Activity {
 		List<DBCommon> commons = daoCommon.findByAncestor(this.getIntent().getLongExtra(TableCommon.COL_ID, 1L));
 		
 		ArrayList<Box> boxes = new ArrayList<Box>();
-		
-		for (DBCommon common : commons) {
+
+		/*for (DBCommon common : commons) {
 			// Créer les boites
 			//boxes.add(new Box(this, new Point(100 - BOX_WIDTH / 2, 100), BOX_WIDTH, BOX_HEIGHT, common, daoDictionary.findByObject(common.getId()))); 
-		}
+			Box box = new Box(this, common, daoDictionary.findByObject(common.getId()),0);
+			boxes.add(box);
+		}*/
 		
-		boxes.add(new Box(this, new Point(100 / 2, 100), null, null));
-		boxes.add(new Box(this, new Point(100 / 2, 300), null, null));
-		boxes.add(new Box(this, new Point(100 / 2, 500), null, null));
+		Box box = Box.createBox(this, daoCommon.read(this.getIntent().getLongExtra(TableCommon.COL_ID, 1L)));
+		boxes.add(box);
+		//boxes.add(new Box(this, new Point(100 / 2, 100), null, null));
+		//boxes.add(new Box(this, new Point(100 / 2, 300), null, null));
+		//boxes.add(new Box(this, new Point(100 / 2, 500), null, null));
 
 		Area area = new Area(this, boxes);
 		setContentView(area);

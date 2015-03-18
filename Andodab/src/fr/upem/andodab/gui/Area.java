@@ -35,11 +35,15 @@ public class Area extends View {
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
-
+		float margin = 20;
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
-
+		float x = 50;
+		float y = 50;
 		for (Box b : boxes) {
+			canvas.translate(x, y);
 			b.draw(canvas);
+			canvas.translate(-x, -y);
+			x += margin + b.getBoxWidth();
 		}
 
 		invalidate();

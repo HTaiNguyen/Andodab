@@ -1,7 +1,10 @@
 package fr.upem.andodab.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import fr.upem.andodab.dao.DAOCommon;
+import fr.upem.andodab.dao.DAODictionary;
 import fr.upem.andodab.db.DBCommon;
 import fr.upem.andodab.db.DBDictionary;
 import android.content.Context;
@@ -13,25 +16,67 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class Box extends View {
+	
+	private final static int PADDING = 5;
+	private final static int MARGIN = 5;
+	
 	private Point position;
-	private int width;
-	private int height;
 	private Point initialPosition;
 	private Point offsetPosition;
+	
 	private DBCommon dbCommon;
 	private List<DBDictionary> dbDictionaries;
+	
+	private ArrayList<Box> boxes;
+	
+	private float width;
+	private float height;
 
-	public Box(Context context, Point position, DBCommon dbCommmon, List<DBDictionary> dbDictionaries) {
+	public Paint textPaint;
+
+	private Box(Context context, DBCommon dbCommmon, List<DBDictionary> dbDictionaries, List<Box> boxes) {
 		super(context);
 
-		this.position = new Point(position.x, position.y);
-
-		initialPosition = new Point();
-		offsetPosition = new Point();
+		this.position = new Point(0, 0);
+		this.initialPosition = new Point();
+		this.offsetPosition = new Point();
 
 		this.dbCommon = dbCommmon;
 		this.dbDictionaries = dbDictionaries;
+		
+		this.boxes = (ArrayList<Box>) boxes;
+		
+		width = 0;
+		height = 0;
+		
+		textPaint = new Paint();
+		textPaint.setColor(Color.rgb(0, 130, 0));
+		textPaint.setTextSize(10.0f);
 	}
+	
+	public static Box createBox(Context context, DBCommon dbCommon) {
+		DAOCommon daoCommon = new DAOCommon(context.getContentResolver());
+		DAODictionary daoDictionary = new DAODictionary(context.getContentResolver());
+		
+		List<DBCommon> commons = daoCommon.findByAncestor(dbCommon.getId());
+		
+		ArrayList<Box> boxes = new ArrayList<Box>();
+		float heightMaxLayer = 0;
+		for (DBCommon common : commons) {
+			Box box = Box.createBox(context, common);
+			box.computeBoxSize();
+			
+			if (heightMaxLayer < box.height) {
+				heightMaxLayer = box.height;
+			}
+			
+			boxes.add(box);
+		}
+		Box box = new Box(context, dbCommon, daoDictionary.findByObject(dbCommon.getId()), boxes);
+		box.computeBoxSize();
+		return box;
+	}
+	
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -61,49 +106,94 @@ public class Box extends View {
 
 	@Override
 	public void draw(Canvas canvas) {
-		super.draw(canvas);
+		drawBox(canvas);
+		if(boxes.isEmpty()) {
+			canvas.translate(width+MARGIN, 0);
+		}
 
-		int padding = 5;
-
+		if(!boxes.isEmpty()) {
+			canvas.translate(0, height+MARGIN);
+		}
+		
+		for(Box b : boxes) {
+			b.draw(canvas);
+		}
+		
+		if(!boxes.isEmpty()) {
+			canvas.translate(0, -(height+MARGIN));
+		}
+		
+		invalidate();
+	}
+	
+	private void drawBox(Canvas canvas) {
 		float height = 0;
 		float width = 0;
-
 		Paint paint = new Paint();
 
 		paint.setColor(Color.rgb(0, 130, 0));
 		paint.setTextSize(10.0f);
 
-		String name = "OBJET";
-		int yTitle = position.y + (int) paint.getTextSize() + padding;
-		height = yTitle - position.y;
-		width = paint.measureText(name);
+		int yTitle = (int) paint.getTextSize() + PADDING;
+		height = yTitle;
+		width = paint.measureText(dbCommon.getName()) + PADDING;
 
-		canvas.drawText(name, position.x + padding, yTitle, paint);
+		canvas.drawText(dbCommon.getName(), PADDING, yTitle, paint);
 
-		String[] attributes = { "ATTR1 : VALUE1", "ATTR2 : VALUE2", "ATTR3 : VALUE3", "ATTR4 : VALUE4", "ATTR5 : VALUE5" };
+		int yAttribute = yTitle + (2 * PADDING);
+		height += 2 * PADDING;
 
-		int yAttribute = yTitle + (2 * padding);
-		height += 2 * padding;
-
-		for (int i = 0; i < attributes.length; i++) {
-			float textWidth = paint.measureText(attributes[i]);
+		for (DBDictionary dictionary : dbDictionaries) {
+			float textWidth = paint.measureText(dictionary.toString());
 
 			if (textWidth > width) {
-				width = textWidth;
+				width = textWidth + PADDING;
 			}
 
-			yAttribute += (int) paint.getTextSize() + padding;
-			height += (int) paint.getTextSize() + padding;
+			yAttribute += (int) paint.getTextSize() + PADDING;
+			height += (int) paint.getTextSize() + PADDING;
 
-			canvas.drawText(attributes[i], position.x + padding, yAttribute, paint);
+			canvas.drawText(dictionary.toString(), PADDING, yAttribute, paint);
 		}
 
 		paint.setColor(Color.rgb(0, 130, 0));
 		paint.setAntiAlias(true);
 		paint.setStyle(Paint.Style.STROKE);
 
-		canvas.drawRect(position.x, position.y, position.x + width + (2 * padding), position.y + height + padding, paint);
+		canvas.drawRect(0, 0, width + PADDING, height + PADDING, paint);
 
-		invalidate();
 	}
+	
+	private void computeBoxSize() {
+		int yTitle = position.y + (int) textPaint.getTextSize() + PADDING;
+		height = yTitle - position.y;
+		width = textPaint.measureText(dbCommon.getName()) + PADDING;
+
+
+		int yAttribute = yTitle + (2 * PADDING);
+		height += 2 * PADDING;
+
+		for (DBDictionary dictionary : dbDictionaries) {
+			float textWidth = textPaint.measureText(dictionary.toString());
+
+			if (textWidth > width) {
+				width = textWidth + PADDING;
+			}
+
+			yAttribute += (int) textPaint.getTextSize() + PADDING;
+			height += (int) textPaint.getTextSize() + PADDING;
+		}
+		this.height = height + PADDING;
+		this.width = width + PADDING;
+	}
+
+	public float getBoxHeight() {
+		return height;
+	}
+	
+	public float getBoxWidth() {
+		return width;
+	}
+	
+	
 }
