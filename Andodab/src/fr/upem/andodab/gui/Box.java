@@ -142,7 +142,7 @@ public class Box extends View {
 		} else {
 			//canvas.translate((maxWidth/2)+width/2-width,0);
 		}*/
-		
+		canvas.translate(position.x,position.y);
 		drawBox(canvas);
 		if(boxes.isEmpty()) {
 		canvas.translate(width+MARGIN, 0);
